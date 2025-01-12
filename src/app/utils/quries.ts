@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { TMediaTitle } from "../types";
 /**
  * @requires page: Int
  * @requires sort: [MediaSort]
@@ -26,3 +27,19 @@ export const getTopSearchOfSeason = gql`query($page: Int, $sort: [MediaSort], $s
     }
   }
 }`;
+type TCustomMedia={
+  title:TMediaTitle
+  id:number
+  coverImage:{
+    color:string
+    medium:string
+  }
+}
+export type TGetTopSearchOfSeason = {
+  Page:{
+    pageInfo:{
+      currentPage:number
+    },
+    media:TCustomMedia[]
+  }
+};
