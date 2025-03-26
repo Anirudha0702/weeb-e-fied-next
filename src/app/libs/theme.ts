@@ -29,6 +29,15 @@ const theme = createTheme({
     typography: {
       fontFamily: '"Roboto", sans-serif',
     },
+    breakpoints: {
+      values: {
+        xs: 0,      // Tailwind xs
+        sm: 600,    // Tailwind sm
+        md: 900,    // Tailwind md
+        lg: 1200,   // Tailwind lg
+        xl: 1536,   // Tailwind xl
+      },
+    },
   });
   
 
