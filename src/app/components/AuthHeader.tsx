@@ -5,11 +5,11 @@ import { z } from "zod";
 const AuthHeader = ({ sx = "" }: { sx?: string }) => {
   return (
     <div className={sx}>
-      <Link href="/anime/home" className="w-20 block">
+      <Link href="/anime/home" className="block">
         <Image
-          src="/new-logo-2.png"
+          src="/logo-2-1_no-bg.png"
           alt="Otaku Guild"
-          width={100}
+          width={200}
           height={100}
         />
       </Link>
