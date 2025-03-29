@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-export default function NotFound() {
+export default function Page() {
   redirect("/anime/home"); // Redirect to home or any custom route
   return (
     <div>

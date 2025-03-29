@@ -14,35 +14,39 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { signupSchema } from "@/app/types/Api/request";
+import { useState } from "react";
 
 const page = () => {
-  const loginFormSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(8).max(12),
-    fullname: z.string(),
-  });
-  const form = useForm<z.infer<typeof loginFormSchema>>({
-    resolver: zodResolver(loginFormSchema),
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const form = useForm<z.infer<typeof signupSchema>>({
+    resolver: zodResolver(signupSchema),
     defaultValues: {
       email: "",
       password: "",
       fullname: "",
     },
   });
-  function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    fetch("/api/verifyMail", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    }).then((res) => {
-      if (res.ok) {
-        console.log("Email sent successfully");
-      } else {
-        console.log("Error sending email");
+  async function onSubmit(values: z.infer<typeof signupSchema>) {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+      const data = await res.json();
+      if (res.status !== 201) {
+        setError(data.message);
       }
-    });
+    } catch (error) {
+      setError("Something went wrong. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
   }
   return (
     <div className=" relative w-full lg:w-[60svw]  min-h-screen flex flex-col ">
