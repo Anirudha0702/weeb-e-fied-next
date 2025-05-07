@@ -29,7 +29,6 @@ export default function RestLayout({
   return (
     <>
       <Header />
-      page layout
       {children}
     </>
   );

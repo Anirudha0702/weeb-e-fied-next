@@ -3,6 +3,12 @@
 @tailwind utilities;
 
 @layer base {
+  @font-face {
+    font-family: "logoFont";
+    src: url("/fonts/NewWaltDisneyFont.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -71,9 +77,9 @@
   .clip-triangle {
     clip-path: polygon(0% 0%, 100% 30%, 0% 100%);
   }
-  .custom-pointer {
+  /* .custom-pointer {
     cursor: url("/pointer-cursor.png"), auto !important;
-  }
+  } */
   @keyframes reveal {
     0% {
       transform: scaleX(calc(3rem / 100%));
@@ -89,8 +95,13 @@
     animation: reveal 0.5s ease-in-out forwards;
   }
 }
-
-html,
+@font-face {
+  font-family: "logoFont";
+  src: url("/public/fonts/njnaruto.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+/* html,
 body {
   cursor: url("/cursor.png"), auto;
 }
@@ -101,4 +112,4 @@ body {
 }
 input:hover {
   cursor: url("/cursor.png"), auto;
-}
+} */

@@ -31,8 +31,7 @@ export default function AuthLayout({
   return (
     // <html lang="en" className="dark">
     // <body className={`${roboto_Mono.className} antialiased`}>
-    <div className="flex flex-row h-svh w-svw bg-[url('/login-5.jpg')] bg-cover bg-center relative">
-      <AuthHeader sx="absolute top-0 left-0 custom-pointer z-20" />
+    <div className="flex flex-row h-svh w-svw bg-[url('/login-7.png')] bg-cover bg-center relative">
       <div className="hidden lg:block w-full">{/* <Slider /> */}</div>
       {children}
     </div>

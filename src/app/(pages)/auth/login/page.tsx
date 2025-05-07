@@ -45,7 +45,7 @@ const page = () => {
   }
   return (
     <div className=" relative w-full lg:w-[60svw]  min-h-screen flex flex-col ">
-      <div className="absolute inset-0 bg-[#C46FE7]/30 backdrop-blur-lg"></div>
+      <div className="absolute inset-0 bg-black/20 backdrop-blur-lg"></div>
       <div className="z-10 flex flex-col justify-center items-center space-y-8 mx-auto  flex-1 w-full p-4">
         <div className="w-full flex flex-col justify-center items-center ">
           <Form {...form}>
