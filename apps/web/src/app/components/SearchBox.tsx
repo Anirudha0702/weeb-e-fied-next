@@ -19,12 +19,12 @@ export default function SearchBox({
     <React.Fragment>
       {renderIcon ? (
         <Button
-          variant="outline"
           size="icon"
-          className="md:hidden "
+          variant="icon"
+          className="md:hidden shadow-none border-none "
           onClick={() => setShowInputField(!showInputField)}
         >
-          <Search />
+          <Search className="!w-6 !h-6" />
         </Button>
       ) : (
         <Input

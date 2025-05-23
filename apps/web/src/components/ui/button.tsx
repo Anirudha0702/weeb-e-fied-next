@@ -9,6 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        icon: "rounded-full  focus:outline-none px-0 py-0 ",
         custom: "bg-white rounded-lg text-[#2A2A2A] shadow-sm font-logoFont  ",
         customOutline:
           "border-2 border-white bg-transparent text-white rounded-lg font-logoFont ",

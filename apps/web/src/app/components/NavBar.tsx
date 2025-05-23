@@ -10,12 +10,12 @@ import {
 } from "@/components/ui/sheet";
 import { Links } from "../utils/aliases";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import SearchBox from "@/app/components/SearchBox";
-import { Bell, Facebook, Github } from "lucide-react";
-import Image from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Bell, MessageCircleMore } from "lucide-react";
+import Profile from "@/app/components/Profile";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   const [scroll, setScroll] = useState(false);
@@ -32,6 +32,7 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  const router = useRouter();
   return (
     <div
       className={cn(
@@ -156,11 +157,18 @@ const Header = () => {
               Sign Up
             </Link>
           </Button>
-          {/* <Bell />
-          <Avatar className="ml-2">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar> */}
+          {/* <Button variant="icon" size="icon" className="hidden sm:inline-flex">
+            <Link href={"/anime/community"}>
+              <MessageCircleMore className="!w-6 !h-6" />
+            </Link>
+          </Button>
+
+          <Button variant="icon" size="icon" className="hidden sm:inline-flex">
+            <Link href={"/notifications"}>
+              <Bell className="!w-6 !h-6" />
+            </Link>
+          </Button>
+          <Profile /> */}
         </div>
       </div>
     </div>
