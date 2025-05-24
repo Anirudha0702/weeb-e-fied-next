@@ -10,7 +10,9 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "dev:web": "turbo run dev --filter=weeb-e-fied-web"
+    "dev:web": "turbo run dev --filter=weeb-e-fied-web",
+    "dev:api": "turbo run dev --filter=weeb-e-fied-api",
+    "docker:db": "docker compose -f docker/docker-compose.dev.yml up -d"
   },
   "keywords": [],
   "author": "",
