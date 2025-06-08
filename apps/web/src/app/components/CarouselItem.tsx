@@ -76,11 +76,11 @@ export default function CarouselItem({ media }: CarouselItemProps) {
           </div>
         </CardContent>
         <CardFooter className="flex gap-2">
-          <Button variant="outline" onClick={() => handleClick("watch")}>
+          <Button variant="styled" onClick={() => handleClick("watch")}>
             <Play />
             Watch Now
           </Button>
-          <Button onClick={() => handleClick("info")}>
+          <Button variant="styled" onClick={() => handleClick("info")}>
             <Info />
             More Info
           </Button>

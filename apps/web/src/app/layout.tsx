@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cinzel_Decorative, Roboto } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 export const cinzel = Cinzel_Decorative({
   variable: "--font-cinzel",
@@ -27,7 +28,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${roboto_Mono.className} antialiased`}>{children}</body>
+      <body className={`${roboto_Mono.className} antialiased`}>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

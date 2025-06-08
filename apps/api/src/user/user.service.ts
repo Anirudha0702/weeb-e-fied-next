@@ -33,6 +33,9 @@ export class UserService {
       const { password, authProvider, authProviderId, ...userData } = user;
       return userData;
     } catch (error) {
+      if (error instanceof ConflictException) {
+        throw error; // Re-throw the conflict exception
+      }
       throw new HttpException(
         'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,

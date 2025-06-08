@@ -16,6 +16,7 @@ import SearchBox from "@/app/components/SearchBox";
 import { Bell, MessageCircleMore } from "lucide-react";
 import Profile from "@/app/components/Profile";
 import { useRouter } from "next/navigation";
+import AuthPopUp from "@/app/components/Popups/AuthPopup";
 
 const Header = () => {
   const [scroll, setScroll] = useState(false);
@@ -141,22 +142,15 @@ const Header = () => {
               />
             </Link>
           </section> */}
-          <Button asChild size={"custom"} variant={"custom"}>
-            <Link
-              href={"/auth/login"}
-              className="hidden md:flex items-center !text-lg"
-            >
-              Login
-            </Link>
-          </Button>
-          <Button asChild size={"custom"} variant={"customOutline"}>
-            <Link
-              href={"/auth/signup"}
-              className="hidden md:flex items-center !text-lg"
-            >
-              Sign Up
-            </Link>
-          </Button>
+          <span className="hidden sm:block">
+            <AuthPopUp formtype="login" />
+            <AuthPopUp formtype="register" />
+          </span>
+          {/* <Button
+            variant="icon"
+            size="icon"
+            className="hidden sm:inline-flex"
+            onClick={() => router.push("/anime/community")}
           {/* <Button variant="icon" size="icon" className="hidden sm:inline-flex">
             <Link href={"/anime/community"}>
               <MessageCircleMore className="!w-6 !h-6" />
