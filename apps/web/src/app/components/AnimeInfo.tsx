@@ -16,10 +16,10 @@ export default function AnimeInfo({
   coverImage,
 }: AnimeInfoProps) {
   return (
-    <div className="px-4">
-      <div className="max-w-screen-xl mx-auto flex gap-4 flex-col sm:flex-row items-start justify-between">
+    <div className="p-4  relative">
+      <div className=" max-w-screen-xl mx-auto flex gap-4 flex-col sm:flex-row items-start ">
         <div className="w-[100px] sm:w-[200px] flex sm:inline-flex gap-2 sm:flex-col">
-          <div className="w-[100px] sm:w-[200px] aspect-[3/4] relative -mt-32 sm:-mt-34 z-10 shrink-0">
+          <div className="w-[100px] sm:w-[200px] aspect-[3/4] relative -mt-32 sm:-mt-34 shrink-0">
             <Image
               src={coverImage}
               alt="Anime Cover"
@@ -35,13 +35,13 @@ export default function AnimeInfo({
               isInWatchList
               value="watching"
             />
-            <Button variant="outline" size="icon">
+            <Button className="bg-secondary">
               <Play />
             </Button>
           </div>
         </div>
-        <div className="">
-          <h2 className="text-lg font-semibold">{title}</h2>
+        <div className="max-w-2xl">
+          <h2 className="text-xl font-semibold">{title}</h2>
           <p
             className="text-sm text-muted-foreground block max-w-[1/3]"
             dangerouslySetInnerHTML={{ __html: description }}

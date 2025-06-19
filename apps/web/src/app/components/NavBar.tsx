@@ -37,10 +37,10 @@ const Header = () => {
   return (
     <div
       className={cn(
-        `h-14 w-full   flex items-center relative md:fixed  top-0 bg-slate-900/20 ${
+        `h-14 w-full   flex items-center relative md:fixed  top-0 z-[100]  bg-slate-900/20 ${
           scroll
             ? "from-slate-950 to-slate-900"
-            : "transparent backdrop-blur-sm z-50"
+            : "transparent backdrop-blur-sm "
         } p-2 px-4`
       )}
     >

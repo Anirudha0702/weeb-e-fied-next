@@ -33,3 +33,28 @@ export const getTitle = (obj: Record<string, string | undefined>) => {
   if (native) return native;
   return "";
 };
+const monthNames = [
+  "",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+export const formatDate = (date: {
+  year: number | null;
+  month: number | null;
+  day: number | null;
+}) => {
+  const { year, month, day } = date;
+  if (!year && !month && !day) return "Unknown";
+
+  return `${monthNames[month ?? 0]} ${day ?? ""}, ${year ?? ""}`;
+};

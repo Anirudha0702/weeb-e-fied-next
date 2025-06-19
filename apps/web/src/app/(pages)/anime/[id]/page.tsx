@@ -1,4 +1,5 @@
 import AnimeInfo from "@/app/components/AnimeInfo";
+import AnimeMetadata from "@/app/components/AnimeMetadata";
 import client from "@/app/libs/apolloClient";
 import { getImageUrl, getTitle } from "@/app/utils/Functions";
 import { getAnimeDetails, TAnimeDetailsResponse } from "@/app/utils/quries";
@@ -41,6 +42,7 @@ export default async function AnimeInfoPage({ params }: AnimeInfoPageProps) {
         title={getTitle(Media.title)}
         coverImage={getImageUrl(Media.coverImage)}
       />
+      <AnimeMetadata metadata={Media} />
     </div>
   );
 }

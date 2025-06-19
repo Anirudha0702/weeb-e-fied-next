@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { TCoverImage, TMediaTitle } from "../types";
+import { TCoverImage, TMediaTitle, TSeason, TStatus } from "../types";
 /**
  * @requires page: Int
  * @requires sort: [MediaSort]
@@ -167,10 +167,49 @@ export const getAnimeDetails = gql`
         rank
       }
       type
+      stats {
+        scoreDistribution {
+          amount
+          score
+        }
+        statusDistribution {
+          amount
+          status
+        }
+      }
+      status
+      format
+      season
     }
   }
 `;
-
+export type TMediaStatus =
+  | "FINISHED"
+  | "RELEASING"
+  | "NOT_YET_RELEASED"
+  | "CANCELLED"
+  | "HIATUS";
+export type TMediaFormat =
+  | "TV"
+  | "TV_SHORT"
+  | "MOVIE"
+  | "SPECIAL"
+  | "OVA"
+  | "ONA"
+  | "MUSIC"
+  | "MANGA"
+  | "NOVEL"
+  | "ONE_SHOT";
+export type TStats = {
+  scoreDistribution: {
+    amount: number;
+    score: number;
+  }[];
+  statusDistribution: {
+    amount: number;
+    status: TMediaStatus;
+  }[];
+};
 export type TResponsePopularAnimes = {
   Page: {
     media: {
@@ -232,7 +271,7 @@ export type TAnimeDetailsResponse = {
           first: string;
           middle: string;
         };
-      };
+      }[];
     };
     episodes: number;
     externalLinks: {
@@ -283,5 +322,9 @@ export type TAnimeDetailsResponse = {
       rank: number;
     }[];
     type: "ANIME";
+    stats: TStats;
+    status: TStatus;
+    format: TMediaFormat;
+    season: TSeason;
   };
 };
