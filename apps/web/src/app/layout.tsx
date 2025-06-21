@@ -30,6 +30,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`${roboto_Mono.className} antialiased`}>
         {children}
+
         <Toaster />
       </body>
     </html>

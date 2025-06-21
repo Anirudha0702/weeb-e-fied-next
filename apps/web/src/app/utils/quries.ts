@@ -183,6 +183,12 @@ export const getAnimeDetails = gql`
     }
   }
 `;
+export type TMediaListStatus =
+  | "CURRENT"
+  | "PLANNING"
+  | "DROPPED"
+  | "PAUSED"
+  | "REPEATING";
 export type TMediaStatus =
   | "FINISHED"
   | "RELEASING"
@@ -207,7 +213,7 @@ export type TStats = {
   }[];
   statusDistribution: {
     amount: number;
-    status: TMediaStatus;
+    status: TMediaListStatus;
   }[];
 };
 export type TResponsePopularAnimes = {
@@ -311,7 +317,7 @@ export type TAnimeDetailsResponse = {
     trending: number | null;
     trailer: {
       site: string;
-      id: number;
+      id: string;
       thumbnail: string;
     };
     tags: {

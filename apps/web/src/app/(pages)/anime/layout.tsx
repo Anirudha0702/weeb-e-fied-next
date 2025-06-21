@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cinzel_Decorative, Roboto } from "next/font/google";
 import "../../globals.css";
 import Header from "../../components/NavBar";
+import Footer from "@/app/components/Footer";
 
 export const cinzel = Cinzel_Decorative({
   variable: "--font-cinzel",
@@ -30,6 +31,7 @@ export default function RestLayout({
     <>
       <Header />
       {children}
+      <Footer />
     </>
   );
 }

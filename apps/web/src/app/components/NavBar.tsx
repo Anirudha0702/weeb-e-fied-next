@@ -10,11 +10,9 @@ import {
 } from "@/components/ui/sheet";
 import { Links } from "../utils/aliases";
 import Link from "next/link";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import SearchBox from "@/app/components/SearchBox";
-import { Bell, MessageCircleMore } from "lucide-react";
-import Profile from "@/app/components/Profile";
 import { useRouter } from "next/navigation";
 import AuthPopUp from "@/app/components/Popups/AuthPopup";
 
@@ -104,44 +102,7 @@ const Header = () => {
         <SearchBox />
         <div className=" ml-auto flex items-center gap-2">
           <SearchBox renderIcon />
-          {/* <section className="flex items-center gap-1 mx-2">
-            <Link href="">
-              <Image
-                src="/meta.svg"
-                height={30}
-                width={30}
-                alt="Meta"
-                className="object-contain"
-              />
-            </Link>
-            <Link href="">
-              <Image
-                src="/github.svg"
-                height={30}
-                width={30}
-                alt="Github"
-                className="object-contain"
-              />
-            </Link>
-            <Link href="">
-              <Image
-                src="/linkedin.svg"
-                height={30}
-                width={30}
-                alt="Linked In"
-                className="object-contain"
-              />
-            </Link>
-            <Link href="">
-              <Image
-                src="/x.svg"
-                height={30}
-                width={30}
-                alt="X"
-                className="object-contain"
-              />
-            </Link>
-          </section> */}
+
           <span className="hidden sm:block">
             <AuthPopUp formtype="login" />
             <AuthPopUp formtype="register" />

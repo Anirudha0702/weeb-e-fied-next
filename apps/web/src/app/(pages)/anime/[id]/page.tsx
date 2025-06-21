@@ -41,6 +41,16 @@ export default async function AnimeInfoPage({ params }: AnimeInfoPageProps) {
         description={Media.description}
         title={getTitle(Media.title)}
         coverImage={getImageUrl(Media.coverImage)}
+        isAdult={Media.isAdult}
+        trailer={
+          Media.trailer.site === "youtube"
+            ? {
+                site: Media.trailer.site,
+                id: Media.trailer.id,
+                thumbnail: Media.trailer.thumbnail,
+              }
+            : null
+        }
       />
       <AnimeMetadata metadata={Media} />
     </div>
