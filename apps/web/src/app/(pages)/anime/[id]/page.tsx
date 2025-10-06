@@ -43,7 +43,7 @@ export default async function AnimeInfoPage({ params }: AnimeInfoPageProps) {
         coverImage={getImageUrl(Media.coverImage)}
         isAdult={Media.isAdult}
         trailer={
-          Media.trailer.site === "youtube"
+          Media.trailer?.site === "youtube"
             ? {
                 site: Media.trailer.site,
                 id: Media.trailer.id,

@@ -14,7 +14,7 @@ export default function AnimeMetadata({ metadata }: AnimeMetadataProps) {
         id="metadata"
         className="   max-w-screen-xl mx-auto grid lg:grid-cols-[200px_1fr] gap-6"
       >
-        {metadata.trailer.site === "youtube" && (
+        {metadata.trailer?.site === "youtube" && (
           <div className="block lg:hidden aspect-video w-full">
             <iframe
               className="w-full h-full"

@@ -30,7 +30,7 @@ export default function RestLayout({
   return (
     <>
       <Header />
-      {children}
+      <main className="flex-1 ">{children}</main>
       <Footer />
     </>
   );
