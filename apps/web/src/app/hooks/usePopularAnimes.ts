@@ -1,20 +1,22 @@
-import client from "@/app/libs/apolloClient";
-import { getCurrentSeason } from "@/app/utils/Functions";
-import { getPopularAnimes, TResponsePopularAnimes } from "@/app/utils/quries";
-import { ApolloError, useQuery } from "@apollo/client";
+import { useQuery } from "@tanstack/react-query";
+import { request } from "graphql-request";
+import { getPopularAnimes, type TResponsePopularAnimes } from "../utils/quries";
+import { getCurrentSeason } from "../utils/Functions";
 
-export const usePopularAnimes = () => {
-  const { loading, data, error } = useQuery<TResponsePopularAnimes>(
-    getPopularAnimes,
-    {
-      variables: {
+function usePopularAnimes() {
+  const endpoint = "https://graphql.anilist.co";
+  const { isLoading, data, error } = useQuery<TResponsePopularAnimes>({
+    queryKey: ["popular-animes"],
+    queryFn: async () => {
+      return await request(endpoint, getPopularAnimes, {
         type: "ANIME",
         sort: ["TRENDING_DESC"],
         season: getCurrentSeason(),
         page: 1,
         perPage: 10,
-      },
-    }
-  );
-  return { loading, data, error };
-};
+      });
+    },
+  });
+  return { isLoading, data, error };
+}
+export default usePopularAnimes;

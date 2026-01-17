@@ -2,6 +2,7 @@
 node_modules/
 .pnpm/
 .turbo/
+temp
 # Build output
 dist/
 .next/

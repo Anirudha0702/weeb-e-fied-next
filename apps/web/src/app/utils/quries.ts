@@ -1,5 +1,10 @@
-import { gql } from "@apollo/client";
-import { TCoverImage, TMediaTitle, TSeason, TStatus } from "../types";
+import { gql } from "graphql-request";
+import type {
+  TCoverImage,
+  TMediaTitle,
+  TSeason,
+  TStatus,
+} from "../types/types";
 /**
  * @requires page: Int
  * @requires sort: [MediaSort]
@@ -70,11 +75,103 @@ export const getPopularAnimes = gql`
     }
   }
 `;
+export const getLatestAnimes = gql`
+  query ($season: MediaSeason, $year: Int, $type: MediaType) {
+    Page(page: 1, perPage: 20) {
+      media(type: $type, season: $season, seasonYear: $year) {
+        id
+        coverImage {
+          medium
+          large
+          extraLarge
+          color
+        }
+        bannerImage
+        description
+        title {
+          english
+          native
+          romaji
+          userPreferred
+        }
+        episodes
+        format
+        genres
+      }
+    }
+  }
+`;
+export const getTrendingAnimes = gql`
+  query (
+    $season: MediaSeason
+    $year: Int
+    $type: MediaType
+    $sort: [MediaSort]
+  ) {
+    Page(page: 1, perPage: 30) {
+      media(type: $type, season: $season, seasonYear: $year, sort: $sort) {
+        id
+        coverImage {
+          medium
+          large
+          extraLarge
+          color
+        }
+        bannerImage
+        description
+        title {
+          english
+          native
+          romaji
+          userPreferred
+        }
+        episodes
+        format
+        genres
+      }
+    }
+  }
+`;
+export const getAiringSchedule = gql`
+  query ($start: Int!, $end: Int!) {
+    Page(page: 1, perPage: 50) {
+      pageInfo {
+        hasNextPage
+        total
+        perPage
+        currentPage
+        lastPage
+      }
+      airingSchedules(
+        airingAt_greater: $start
+        airingAt_lesser: $end
+        sort: [TIME_DESC]
+      ) {
+        airingAt
+        episode
+        media {
+          id
+          title {
+            romaji
+            english
+            native
+            userPreferred
+          }
+          season
+          seasonYear
+          status
+        }
+      }
+    }
+  }
+`;
 
 export const getAnimeDetails = gql`
   query ($mediaId: Int) {
     Media(id: $mediaId) {
       bannerImage
+      countryOfOrigin
+      favourites
       coverImage {
         color
         extraLarge
@@ -87,6 +184,13 @@ export const getAnimeDetails = gql`
       duration
       endDate {
         year
+        day
+        month
+      }
+      studios {
+        nodes {
+          name
+        }
       }
       averageScore
       characters {
@@ -216,6 +320,22 @@ export type TStats = {
     status: TMediaListStatus;
   }[];
 };
+
+export type TResponseWithPageInfo = {
+  Page: {
+    pageInfo: TPageInfo;
+    media: {
+      id: number;
+      coverImage: TCoverImage;
+      bannerImage: string;
+      description: string;
+      title: TMediaTitle;
+      episodes: number;
+      format: string;
+      genres: string[];
+    }[];
+  };
+};
 export type TResponsePopularAnimes = {
   Page: {
     media: {
@@ -230,6 +350,31 @@ export type TResponsePopularAnimes = {
     }[];
   };
 };
+
+export type TSchedule = {
+  airingAt: number;
+  episode: number;
+  media: {
+    id: number;
+    title: TMediaTitle;
+    season: TSeason;
+    seasonYear: string;
+    status: TStatus;
+  };
+};
+export type TResponseAiringSchedule = {
+  Page: {
+    pageInfo: TPageInfo;
+    airingSchedules: TSchedule[];
+  };
+};
+type TPageInfo = {
+  hasNextPage: boolean;
+  total: number;
+  perPage: number;
+  currentPage: number;
+  lastPage: number;
+};
 type TCustomMedia = {
   title: TMediaTitle;
   id: number;
@@ -243,6 +388,18 @@ export type TGetTopSearchOfSeason = {
     media: TCustomMedia[];
   };
 };
+export type TExtraLink = {
+  site: string;
+  siteId: number;
+  type: string;
+  url: string;
+  language: string;
+  notes: string | null;
+  color: string | null;
+  icon: string | null;
+  id: number;
+  isDisabled: boolean;
+};
 export type TAnimeDetailsResponse = {
   Media: {
     bannerImage: string;
@@ -252,6 +409,8 @@ export type TAnimeDetailsResponse = {
     description: string;
     duration: number;
     endDate: {
+      day: number;
+      month: number;
       year: number;
     };
     averageScore: number;
@@ -279,19 +438,15 @@ export type TAnimeDetailsResponse = {
         };
       }[];
     };
+    studios: {
+      nodes: {
+        name:string
+      }[]
+    };
+    countryOfOrigin: string;
     episodes: number;
-    externalLinks: {
-      site: string;
-      siteId: number;
-      type: string;
-      url: string;
-      language: string;
-      notes: string | null;
-      color: string | null;
-      icon: string | null;
-      id: number;
-      isDisabled: boolean;
-    }[];
+    favourites: number;
+    externalLinks: TExtraLink[];
     hashtag: string;
     idMal: number;
     isAdult: boolean;

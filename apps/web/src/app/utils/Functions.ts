@@ -1,4 +1,4 @@
-import { TSeason } from "../types";
+import type { TMediaTitle, TSeason } from "../types/types";
 
 export const fuzzyDateInt = (date: Date) => {
   const year = date.getFullYear();
@@ -16,6 +16,27 @@ export const getCurrentSeason = (): TSeason => {
   else return "FALL";
 };
 
+export const getStartEndOfWeek = () => {
+  const now = new Date();
+
+  // Monday = start of week (UTC)
+  const startOfWeek = new Date(now);
+  startOfWeek.setUTCDate(now.getUTCDate() - ((now.getUTCDay() + 6) % 7));
+  startOfWeek.setUTCHours(0, 0, 0, 0);
+
+  // Sunday = end of week (UTC)
+  const endOfWeek = new Date(startOfWeek);
+  endOfWeek.setUTCDate(startOfWeek.getUTCDate() + 6);
+  endOfWeek.setUTCHours(23, 59, 59, 999);
+
+  return {
+    start: Math.floor(startOfWeek.getTime() / 1000),
+    end: Math.floor(endOfWeek.getTime() / 1000),
+  };
+};
+export const getTitle = (title: TMediaTitle) => {
+  return title.english || title.romaji || title.native || "Unknown Title";
+};
 export const getImageUrl = (obj: Record<string, string | undefined>) => {
   const { extraLarge, large, medium, small, bannerImage } = obj;
   if (bannerImage) return bannerImage;
@@ -23,16 +44,9 @@ export const getImageUrl = (obj: Record<string, string | undefined>) => {
   if (large) return large;
   if (medium) return medium;
   if (small) return small;
-  return "";
+  return "https://imgs.search.brave.com/VcxLz7-BY3z6UOo6gPii2J8aRW_17o6HE5q7K77tQq0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzBkLzIz/L2ViLzBkMjNlYjk1/ZjJhOTZmMWY0ZDVh/YWU5YjRmZTc5MWZi/LmpwZw";
 };
-export const getTitle = (obj: Record<string, string | undefined>) => {
-  const { romaji, english, native, userPreferred } = obj;
-  if (userPreferred) return userPreferred;
-  if (romaji) return romaji;
-  if (english) return english;
-  if (native) return native;
-  return "";
-};
+
 const monthNames = [
   "",
   "January",
