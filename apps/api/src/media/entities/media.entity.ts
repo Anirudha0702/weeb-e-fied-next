@@ -1,22 +1,22 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
-export class OTP {
+export class Media {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar', unique: true })
-  email: string;
+  @Column()
+  episodeNo: number;
 
   @Column()
-  otpHash: string;
+  anilistId: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
   @Column({
     type: 'timestamp',
-    default: () => "CURRENT_TIMESTAMP + INTERVAL '5 minutes'",
+    default: () => "CURRENT_TIMESTAMP + INTERVAL '1 hour'",
   })
   expiresAt: Date;
 }

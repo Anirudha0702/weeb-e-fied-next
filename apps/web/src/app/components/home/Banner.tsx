@@ -9,8 +9,8 @@ import { getTitle } from "@/app/utils/Functions";
 function Banner() {
   const { isLoading, error, data } = useLatestAnimes();
   const [active, setActive] = useState(0);
-  const navigate=useNavigate()
-  
+  const navigate = useNavigate();
+
   useEffect(() => {
     const interval = setInterval(() => {
       setActive((prev) => (prev + 1) % (data?.Page.media.length || 1));
@@ -18,39 +18,41 @@ function Banner() {
     return () => clearInterval(interval);
   }, [data]);
   if (isLoading) {
-    return <div className="h-80 lg:h-[70svh] relative overflow-hidden bg-background">
-      {/* Background shimmer */}
-      <div className="absolute inset-0 animate-pulse bg-linear-to-r from-muted via-muted/60 to-muted" />
+    return (
+      <div className="h-80 lg:h-[70svh] relative overflow-hidden bg-background">
+        {/* Background shimmer */}
+        <div className="absolute inset-0 animate-pulse bg-linear-to-r from-muted via-muted/60 to-muted" />
 
-      {/* Content */}
-      <div className="absolute bottom-0 pl-10 flex gap-4 items-start p-4 w-full z-10">
-        {/* Cover image skeleton */}
-        <div className="hidden lg:block w-45 h-65 rounded-md bg-muted animate-pulse" />
+        {/* Content */}
+        <div className="absolute bottom-0 pl-10 flex gap-4 items-start p-4 w-full z-10">
+          {/* Cover image skeleton */}
+          <div className="hidden lg:block w-45 h-65 rounded-md bg-muted animate-pulse" />
 
-        {/* Text skeletons */}
-        <div className="flex flex-col gap-3 pt-6 w-full max-w-lg">
-          {/* Title */}
-          <div className="h-10 w-3/4 bg-muted rounded animate-pulse" />
+          {/* Text skeletons */}
+          <div className="flex flex-col gap-3 pt-6 w-full max-w-lg">
+            {/* Title */}
+            <div className="h-10 w-3/4 bg-muted rounded animate-pulse" />
 
-          {/* Description */}
-          <div className="space-y-2">
-            <div className="h-4 w-full bg-muted rounded animate-pulse" />
-            <div className="h-4 w-5/6 bg-muted rounded animate-pulse" />
-            <div className="h-4 w-4/6 bg-muted rounded animate-pulse hidden lg:block" />
-          </div>
+            {/* Description */}
+            <div className="space-y-2">
+              <div className="h-4 w-full bg-muted rounded animate-pulse" />
+              <div className="h-4 w-5/6 bg-muted rounded animate-pulse" />
+              <div className="h-4 w-4/6 bg-muted rounded animate-pulse hidden lg:block" />
+            </div>
 
-          {/* Buttons */}
-          <div className="flex gap-3 mt-4">
-            <div className="h-10 w-32 bg-muted rounded animate-pulse" />
-            <div className="h-10 w-32 bg-muted rounded animate-pulse" />
+            {/* Buttons */}
+            <div className="flex gap-3 mt-4">
+              <div className="h-10 w-32 bg-muted rounded animate-pulse" />
+              <div className="h-10 w-32 bg-muted rounded animate-pulse" />
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Gradients (same as real banner) */}
-      <div className="absolute bottom-8 w-full h-1/2 bg-gradient-to-t from-background to-transparent hidden lg:block" />
-      <div className="absolute bottom-0 w-full h-12 bg-background hidden lg:block" />
-    </div>
+        {/* Gradients (same as real banner) */}
+        <div className="absolute bottom-8 w-full h-1/2 bg-gradient-to-t from-background to-transparent hidden lg:block" />
+        <div className="absolute bottom-0 w-full h-12 bg-background hidden lg:block" />
+      </div>
+    );
   }
   if (error || !data) {
     return <div className="h-80 grow bg-red-800">Error loading banner</div>;
@@ -58,7 +60,6 @@ function Banner() {
   const animes = data.Page.media || [];
   return (
     <div className="h-80 lg:h-[70svh]  overflow-hidden relative">
-     
       <AnimatePresence mode="wait">
         {animes.map(
           (anime, index) =>
@@ -84,7 +85,7 @@ function Banner() {
                   transition={{ duration: 0.3, ease: "easeOut" }}
                 />
               </motion.div>
-            )
+            ),
         )}
       </AnimatePresence>
 
@@ -151,14 +152,26 @@ function Banner() {
                 delay: 0.47, // 👈 comes after image
               }}
             >
-              <Button className="cursor-pointer">
+              <Button
+                className="cursor-pointer"
+                onClick={() =>
+                  navigate({
+                    to: `/watch/${animes[active].id}?${getTitle(animes[active]?.title)}`,
+                  })
+                }
+              >
                 {" "}
                 <Play />
                 Watch Now
               </Button>
-              <Button className="text-white bg-transparent border-2 border-primary cursor-pointer" onClick={()=>navigate({
-              to:`/info/${animes[active].id}`
-            })}>
+              <Button
+                className="text-white bg-transparent border-2 border-primary cursor-pointer"
+                onClick={() =>
+                  navigate({
+                    to: `/info/${animes[active].id}`,
+                  })
+                }
+              >
                 <Info /> More Info{" "}
               </Button>
             </motion.div>

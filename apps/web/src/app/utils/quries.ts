@@ -287,6 +287,58 @@ export const getAnimeDetails = gql`
     }
   }
 `;
+export const getSearchResults = gql`
+  query ($search: String, $page: Int) {
+    Page(page: $page, perPage: 30) {
+      media(search: $search, type: ANIME) {
+        id
+        genres
+        description
+        duration
+        status
+        title {
+          romaji
+          english
+          native
+        }
+        format
+        episodes
+        averageScore
+        startDate {
+          year
+        }
+        coverImage {
+          color
+          extraLarge
+          large
+          medium
+        }
+      }
+    }
+  }
+`;
+
+export type TSearchResponse = {
+  Page: {
+    pageInfo: TPageInfo;
+    media: {
+      id: number;
+      coverImage: TCoverImage;
+      averageScore: number;
+      startDate: {
+        year: number;
+      };
+      episodes: number;
+      format: string;
+      title: TMediaTitle;
+      duration: number;
+      genres: string[];
+      description: string;
+      status: TMediaStatus;
+    }[];
+  };
+};
+
 export type TMediaListStatus =
   | "CURRENT"
   | "PLANNING"
@@ -440,8 +492,8 @@ export type TAnimeDetailsResponse = {
     };
     studios: {
       nodes: {
-        name:string
-      }[]
+        name: string;
+      }[];
     };
     countryOfOrigin: string;
     episodes: number;

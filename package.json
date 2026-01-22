@@ -1,4 +1,7 @@
 {
+  "dependencies": {
+    "@nestjs/mapped-types": "*"
+  },
   "name": "weebefied",
   "version": "1.0.0",
   "private": true,

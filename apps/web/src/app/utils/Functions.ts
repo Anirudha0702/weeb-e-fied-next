@@ -34,7 +34,8 @@ export const getStartEndOfWeek = () => {
     end: Math.floor(endOfWeek.getTime() / 1000),
   };
 };
-export const getTitle = (title: TMediaTitle) => {
+export const getTitle = (title?: TMediaTitle) => {
+  if (!title) return "";
   return title.english || title.romaji || title.native || "Unknown Title";
 };
 export const getImageUrl = (obj: Record<string, string | undefined>) => {

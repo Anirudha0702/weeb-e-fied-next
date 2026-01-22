@@ -1,8 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import cookieParser from 'cookie-parser';
+import { AppLogger } from './common/logger/app.logger';
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
+  const logger = app.get(AppLogger);
+  app.useLogger(logger);
   app.use(cookieParser());
   app.setGlobalPrefix('api');
   app.enableCors({

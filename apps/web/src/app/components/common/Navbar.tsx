@@ -1,4 +1,3 @@
-import { Input } from "@/components/ui/input";
 import { useNavigate } from "@tanstack/react-router";
 import { Menu, User } from "lucide-react";
 import {
@@ -8,8 +7,10 @@ import {
 } from "@/components/ui/popover";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import Sidebar from "./Sidebar";
+import Search from "./SearchField";
 function Navbar() {
   const navigate = useNavigate();
+
   return (
     <div className="h-16 bg-muted flex items-center px-4 shadow-sm fixed top-0 w-full z-100">
       <Drawer direction="left">
@@ -31,7 +32,8 @@ function Navbar() {
           })
         }
       />
-      <Input type="text" placeholder="Search anime" className="max-w-md mx-2" />
+      <Search />
+
       <div className="ml-auto">
         <Popover>
           <PopoverTrigger>

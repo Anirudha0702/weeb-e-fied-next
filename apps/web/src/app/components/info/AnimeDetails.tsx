@@ -1,6 +1,7 @@
 import { formatDate, getTitle } from "@/app/utils/Functions";
 import type { TAnimeDetailsResponse } from "@/app/utils/quries";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "@tanstack/react-router";
 import {
   CirclePlus,
   Clock3,
@@ -15,12 +16,14 @@ import { useState } from "react";
 
 interface IAnimeDetails {
   metadata: TAnimeDetailsResponse["Media"];
+  showWatchNow?: boolean;
 }
 
-function AnimeDetails({ metadata }: IAnimeDetails) {
+function AnimeDetails({ metadata, showWatchNow }: IAnimeDetails) {
   const [showAll, setShowAll] = useState(false);
   const characters = metadata.characters.nodes;
   const visibleCharacters = characters.slice(0, 6);
+  const navigate = useNavigate();
   return (
     <div className="mt-4">
       <div className="flex flex-col md:flex-row justify-center md:justify-between py-4">
@@ -61,10 +64,17 @@ function AnimeDetails({ metadata }: IAnimeDetails) {
         </div>
 
         <div
-          className="space-y-2 mx-auto mt-3 md:justify-self-end md:mx-0"
+          className={`space-y-2 mx-auto mt-3 md:justify-self-end md:mx-0 ${!showWatchNow ? "hidden" : ""}`}
           data-testId="watch-now-share-list-add-wrapper"
         >
-          <Button className="cursor-pointer p-6 rounded-full min-w-48 md:w-full">
+          <Button
+            className="cursor-pointer p-6 rounded-full min-w-48 md:w-full"
+            onClick={() =>
+              navigate({
+                to: `/watch/${metadata.id}?${getTitle(metadata.title)}`,
+              })
+            }
+          >
             {" "}
             Watch Now
             <Play className="ml-10" />

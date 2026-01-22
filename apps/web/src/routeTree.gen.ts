@@ -11,9 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LayoutRouteImport } from './routes/_layout'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as LayoutWatchIndexRouteImport } from './routes/_layout/watch/index'
+import { Route as LayoutSearchIndexRouteImport } from './routes/_layout/search/index'
 import { Route as LayoutHomeIndexRouteImport } from './routes/_layout/home/index'
 import { Route as LayoutGenreIndexRouteImport } from './routes/_layout/genre/index'
+import { Route as LayoutWatchIdRouteImport } from './routes/_layout/watch/$id'
 import { Route as LayoutInfoIdRouteImport } from './routes/_layout/info/$id'
 
 const LayoutRoute = LayoutRouteImport.update({
@@ -25,9 +26,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LayoutWatchIndexRoute = LayoutWatchIndexRouteImport.update({
-  id: '/watch/',
-  path: '/watch/',
+const LayoutSearchIndexRoute = LayoutSearchIndexRouteImport.update({
+  id: '/search/',
+  path: '/search/',
   getParentRoute: () => LayoutRoute,
 } as any)
 const LayoutHomeIndexRoute = LayoutHomeIndexRouteImport.update({
@@ -40,6 +41,11 @@ const LayoutGenreIndexRoute = LayoutGenreIndexRouteImport.update({
   path: '/genre/',
   getParentRoute: () => LayoutRoute,
 } as any)
+const LayoutWatchIdRoute = LayoutWatchIdRouteImport.update({
+  id: '/watch/$id',
+  path: '/watch/$id',
+  getParentRoute: () => LayoutRoute,
+} as any)
 const LayoutInfoIdRoute = LayoutInfoIdRouteImport.update({
   id: '/info/$id',
   path: '/info/$id',
@@ -49,39 +55,43 @@ const LayoutInfoIdRoute = LayoutInfoIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/info/$id': typeof LayoutInfoIdRoute
+  '/watch/$id': typeof LayoutWatchIdRoute
   '/genre': typeof LayoutGenreIndexRoute
   '/home': typeof LayoutHomeIndexRoute
-  '/watch': typeof LayoutWatchIndexRoute
+  '/search': typeof LayoutSearchIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/info/$id': typeof LayoutInfoIdRoute
+  '/watch/$id': typeof LayoutWatchIdRoute
   '/genre': typeof LayoutGenreIndexRoute
   '/home': typeof LayoutHomeIndexRoute
-  '/watch': typeof LayoutWatchIndexRoute
+  '/search': typeof LayoutSearchIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_layout': typeof LayoutRouteWithChildren
   '/_layout/info/$id': typeof LayoutInfoIdRoute
+  '/_layout/watch/$id': typeof LayoutWatchIdRoute
   '/_layout/genre/': typeof LayoutGenreIndexRoute
   '/_layout/home/': typeof LayoutHomeIndexRoute
-  '/_layout/watch/': typeof LayoutWatchIndexRoute
+  '/_layout/search/': typeof LayoutSearchIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/info/$id' | '/genre' | '/home' | '/watch'
+  fullPaths: '/' | '/info/$id' | '/watch/$id' | '/genre' | '/home' | '/search'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/info/$id' | '/genre' | '/home' | '/watch'
+  to: '/' | '/info/$id' | '/watch/$id' | '/genre' | '/home' | '/search'
   id:
     | '__root__'
     | '/'
     | '/_layout'
     | '/_layout/info/$id'
+    | '/_layout/watch/$id'
     | '/_layout/genre/'
     | '/_layout/home/'
-    | '/_layout/watch/'
+    | '/_layout/search/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -105,11 +115,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_layout/watch/': {
-      id: '/_layout/watch/'
-      path: '/watch'
-      fullPath: '/watch'
-      preLoaderRoute: typeof LayoutWatchIndexRouteImport
+    '/_layout/search/': {
+      id: '/_layout/search/'
+      path: '/search'
+      fullPath: '/search'
+      preLoaderRoute: typeof LayoutSearchIndexRouteImport
       parentRoute: typeof LayoutRoute
     }
     '/_layout/home/': {
@@ -126,6 +136,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutGenreIndexRouteImport
       parentRoute: typeof LayoutRoute
     }
+    '/_layout/watch/$id': {
+      id: '/_layout/watch/$id'
+      path: '/watch/$id'
+      fullPath: '/watch/$id'
+      preLoaderRoute: typeof LayoutWatchIdRouteImport
+      parentRoute: typeof LayoutRoute
+    }
     '/_layout/info/$id': {
       id: '/_layout/info/$id'
       path: '/info/$id'
@@ -138,16 +155,18 @@ declare module '@tanstack/react-router' {
 
 interface LayoutRouteChildren {
   LayoutInfoIdRoute: typeof LayoutInfoIdRoute
+  LayoutWatchIdRoute: typeof LayoutWatchIdRoute
   LayoutGenreIndexRoute: typeof LayoutGenreIndexRoute
   LayoutHomeIndexRoute: typeof LayoutHomeIndexRoute
-  LayoutWatchIndexRoute: typeof LayoutWatchIndexRoute
+  LayoutSearchIndexRoute: typeof LayoutSearchIndexRoute
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutInfoIdRoute: LayoutInfoIdRoute,
+  LayoutWatchIdRoute: LayoutWatchIdRoute,
   LayoutGenreIndexRoute: LayoutGenreIndexRoute,
   LayoutHomeIndexRoute: LayoutHomeIndexRoute,
-  LayoutWatchIndexRoute: LayoutWatchIndexRoute,
+  LayoutSearchIndexRoute: LayoutSearchIndexRoute,
 }
 
 const LayoutRouteWithChildren =

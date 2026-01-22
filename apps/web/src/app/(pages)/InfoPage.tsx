@@ -87,7 +87,7 @@ function AnimeInfo() {
             : null
         }
       />
-      <AnimeDetails metadata={info.Media}/>
+      <AnimeDetails metadata={info.Media} showWatchNow/>
     </div>
   );
 }

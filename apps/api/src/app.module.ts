@@ -17,9 +17,14 @@ import { FacebookStrategy } from './auth/stratagy/facebook.strategy';
 import { UploadService } from './upload/upload.service';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/guards/auth/auth.guard';
+import { MediaModule } from './media/media.module';
+import { ScrapperService } from './scrapper/scrapper.service';
+import { AppLogger } from './common/logger/app.logger';
+import { LoggerModule } from './common/logger/logger.module';
 
 @Module({
   imports: [
+    LoggerModule,
     ConfigModule.forRoot({
       envFilePath: '.env.local',
       isGlobal: true,
@@ -36,6 +41,7 @@ import { AuthGuard } from './common/guards/auth/auth.guard';
     OtpModule,
     PassportModule.register({ session: false }),
     PostsModule,
+    MediaModule,
   ],
   controllers: [AppController],
   providers: [
@@ -46,10 +52,13 @@ import { AuthGuard } from './common/guards/auth/auth.guard';
     GoogleStrategy,
     FacebookStrategy,
     UploadService,
+    AppLogger,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    ScrapperService,
   ],
+  exports: [AppLogger],
 })
 export class AppModule {}

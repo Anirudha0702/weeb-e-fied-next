@@ -1,6 +1,8 @@
+version: "3.9"
+
 services:
   db:
-    image: postgres:latest
+    build: .
     container_name: weeb-e-fied-db
     restart: always
     ports:
@@ -10,7 +12,8 @@ services:
       POSTGRES_PASSWORD: Robin@930
       POSTGRES_DB: weeb_e_fied
     volumes:
-      - postgres_data:/var/lib/postgresql
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
   postgres_data:
