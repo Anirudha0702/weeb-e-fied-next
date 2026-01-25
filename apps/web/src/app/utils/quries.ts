@@ -284,12 +284,26 @@ export const getAnimeDetails = gql`
       status
       format
       season
+      nextAiringEpisode {
+        id
+        airingAt
+        timeUntilAiring
+        episode
+        mediaId
+      }
     }
   }
 `;
 export const getSearchResults = gql`
   query ($search: String, $page: Int) {
     Page(page: $page, perPage: 30) {
+      pageInfo {
+        hasNextPage
+        total
+        perPage
+        currentPage
+        lastPage
+      }
       media(search: $search, type: ANIME) {
         id
         genres
@@ -539,5 +553,12 @@ export type TAnimeDetailsResponse = {
     status: TStatus;
     format: TMediaFormat;
     season: TSeason;
+    nextAiringEpisode:{
+        id:number;
+        airingAt:number;
+        timeUntilAiring:number
+        episode:number;
+        mediaId:number
+      }
   };
 };

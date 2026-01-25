@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { House, MoveRight } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 export const Route = createFileRoute("/")({
   component: Index,
 });
@@ -21,7 +22,7 @@ function Index() {
     "Bleach",
   ];
   const navigate = useNavigate();
-
+  const [searchString, setSearchString] = useState("");
   return (
     <div className=" relative w-full bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
       <img
@@ -58,7 +59,22 @@ function Index() {
                   alt=""
                   className="my-14"
                 />
-                <Input type="text" placeholder="Search for anime..." />
+                <Input
+                  type="text"
+                  placeholder="Search for anime..."
+                  value={searchString}
+                  onKeyDown={(e) => {
+                    if (e.key !== "Enter") return;
+                    navigate({
+                      to: "/search",
+                      search: (prev) => ({
+                        ...prev,
+                        query: searchString,
+                      }),
+                    });
+                  }}
+                  onChange={(e) => setSearchString(e.target.value)}
+                />
                 <Button
                   className="w-32 rounded-full mt-4 mx-auto flex "
                   onClick={() =>
@@ -78,6 +94,15 @@ function Index() {
                     <span
                       key={index}
                       className="mr-2 hover:text-primary cursor-pointer"
+                      onClick={() => {
+                        navigate({
+                          to: "/search",
+                          search: (prev) => ({
+                            ...prev,
+                            query: item,
+                          }),
+                        });
+                      }}
                     >
                       {item},
                     </span>

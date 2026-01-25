@@ -77,11 +77,10 @@ function Search() {
             <div
               key={anime.id}
               className="p-2 rounded-md cursor-pointer hover:bg-accent grid grid-cols-[4rem_1fr] gap-2"
-              onClick={() =>
-                navigate({
-                  to: `/info/${anime.id}`,
-                })
-              }
+              onPointerDown={() => {
+                setOpen(false);
+                navigate({ to: `/info/${anime.id}` });
+              }}
             >
               <div className="relative  h-full w-16 shrink-0 grow-0">
                 <img
