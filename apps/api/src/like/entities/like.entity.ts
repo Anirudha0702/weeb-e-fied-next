@@ -6,8 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { Post } from './post.entity';
-import { Comment } from './comment.entity';
+import { Comment } from '../../comment/entities/comment.entity';
 
 @Entity()
 export class Like {
@@ -16,11 +15,9 @@ export class Like {
 
   @ManyToOne(() => User, (user) => user.likes, { onDelete: 'CASCADE' })
   user: User;
-  @ManyToOne(() => Post, (post) => post.likes, { onDelete: 'CASCADE' })
-  post?: Post;
 
   @ManyToOne(() => Comment, (comment) => comment.likes)
-  comment?: Comment;
+  comment: Comment;
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 

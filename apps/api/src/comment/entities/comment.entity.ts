@@ -8,8 +8,7 @@ import {
   Column,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { Post } from './post.entity';
-import { Like } from './like.entity';
+import { Like } from '../../like/entities/like.entity';
 
 @Entity()
 export class Comment {
@@ -20,8 +19,13 @@ export class Comment {
   @ManyToOne(() => User, (user) => user.comments, { onDelete: 'CASCADE' })
   user: User;
 
-  @ManyToOne(() => Post, (post) => post.comments, { onDelete: 'CASCADE' })
-  post: Post;
+  @Column({
+    type: 'enum',
+    enum: ['POST', 'EPISODE'],
+  })
+  targetType: 'POST' | 'EPISODE';
+  @Column({ type: 'uuid' })
+  targetId: string;
   @OneToMany(() => Like, (like) => like.comment)
   likes: Like[];
   @CreateDateColumn({ type: 'timestamptz' })
