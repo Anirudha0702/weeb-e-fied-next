@@ -4,15 +4,13 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToMany,
-  JoinTable,
   OneToMany,
   JoinColumn,
   ManyToOne,
 } from 'typeorm';
 import { Post } from '../../posts/entities/post.entity';
-import { Like } from '../../posts/entities/like.entity';
-import { Comment } from '../../posts/entities/comment.entity';
+import { Like } from '../../like/entities/like.entity';
+import { Comment } from '../../comment/entities/comment.entity';
 
 export enum Gender {
   MALE = 'Male',
@@ -71,8 +69,6 @@ export class User {
 
   @OneToMany(() => OauthUser, (oauth) => oauth.user)
   oauthAccounts: OauthUser[];
-
-  
 
   @OneToMany(() => Post, (post) => post.user)
   posts: Post[];
