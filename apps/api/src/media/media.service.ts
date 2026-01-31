@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { GetEpisodeDto } from './dto/create-media.dto';
-import { ScrapperService } from 'src/scrapper/scrapper.service';
+import { ScrapperService } from '../scrapper/scrapper.service';
 
 @Injectable()
 export class MediaService {

@@ -3,7 +3,7 @@ import { OtpService } from './otp.service';
 import { OtpController } from './otp.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { OTP } from './entities/otp.entity';
-import { EmailService } from 'src/email/email.service';
+import { EmailService } from '../email/email.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([OTP])],

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import * as cheerio from 'cheerio';
-import { AppLogger } from 'src/common/logger/app.logger';
+import { AppLogger } from '../common/logger/app.logger';
 
 @Injectable()
 export class ScrapperService {

@@ -6,7 +6,7 @@ import {
   IsOptional,
   MinLength,
 } from 'class-validator';
-import { Gender, User } from 'src/users/entities/user.entity';
+import { Gender, User } from '../../users/entities/user.entity';
 
 export class SignupDTO {
   @IsEmail({}, { message: 'Invalid email format' })

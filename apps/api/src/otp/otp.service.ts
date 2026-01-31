@@ -10,7 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { OTP } from './entities/otp.entity';
 import { Repository } from 'typeorm';
 import * as crypto from 'crypto';
-import { hash, matchHash } from 'src/utils/security';
+import { hash, matchHash } from '../utils/security';
 @Injectable()
 export class OtpService {
   constructor(

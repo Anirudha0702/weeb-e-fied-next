@@ -1,7 +1,7 @@
 import { Controller, Post, Body, ValidationPipe } from '@nestjs/common';
 import { OtpService } from './otp.service';
 import { CreateOtpDto, VerifyOtpDto } from './dto/otp.dto';
-import { EmailService } from 'src/email/email.service';
+import { EmailService } from '../email/email.service';
 
 @Controller('otp')
 export class OtpController {

@@ -16,9 +16,9 @@ import {
   Repository,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { UploadService } from 'src/upload/upload.service';
-import { matchHash } from 'src/utils/security';
-import { InternalUser } from 'src/auth/dto/auth.dto';
+import { UploadService } from '../upload/upload.service';
+import { matchHash } from '../utils/security';
+import { InternalUser } from '../auth/dto/auth.dto';
 @Injectable()
 export class UserService {
   constructor(

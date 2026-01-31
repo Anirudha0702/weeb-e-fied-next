@@ -10,8 +10,10 @@ async function bootstrap() {
   app.useLogger(logger);
   app.use(cookieParser());
   app.setGlobalPrefix('api');
+  const origins =
+    process.env.CORS_ORIGINS?.split(',').map((o) => o.trim()) ?? [];
   app.enableCors({
-    origin: ['http://localhost:5173'],
+    origin: origins,
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Authorization',
