@@ -11,10 +11,10 @@ import {
   SigninDTO,
   SignupDTO,
 } from './dto/auth.dto';
-import { UserService } from 'src/users/users.service';
-import { matchHash } from 'src/utils/security';
+import { UserService } from '../users/users.service';
+import { matchHash } from '../utils/security';
 import { JwtService } from './jwt/jwt.service';
-import { Response, Request } from 'express';
+import { type Response, type Request } from 'express';
 @Injectable()
 export class AuthService {
   constructor(

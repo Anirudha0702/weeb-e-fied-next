@@ -6,7 +6,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { MediaService } from './media.service';
-import { Public } from 'src/common/decorators/public/public.decorator';
+import { Public } from '../common/decorators/public/public.decorator';
 import { GetEpisodeDto } from './dto/create-media.dto';
 
 @Controller('media')
