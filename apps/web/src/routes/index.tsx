@@ -67,10 +67,28 @@ function Index() {
                     if (e.key !== "Enter") return;
                     navigate({
                       to: "/search",
-                      search: (prev) => ({
-                        ...prev,
-                        query: searchString,
-                      }),
+                      search: (prev) => {
+                        const {
+                          format,
+                          year,
+                          season,
+                          airing_status,
+                          country_of_origin,
+                          source_material,
+                          genres,
+                        } = prev;
+
+                        return {
+                          query: searchString, // required
+                          format: format ?? undefined,
+                          year: year ?? undefined,
+                          season: season ?? undefined,
+                          airing_status: airing_status ?? undefined,
+                          country_of_origin: country_of_origin ?? undefined,
+                          source_material: source_material ?? undefined,
+                          genres: genres ?? undefined,
+                        };
+                      },
                     });
                   }}
                   onChange={(e) => setSearchString(e.target.value)}
@@ -97,10 +115,28 @@ function Index() {
                       onClick={() => {
                         navigate({
                           to: "/search",
-                          search: (prev) => ({
-                            ...prev,
-                            query: item,
-                          }),
+                          search: (prev) => {
+                            const {
+                              format,
+                              year,
+                              season,
+                              airing_status,
+                              country_of_origin,
+                              source_material,
+                              genres,
+                            } = prev;
+
+                            return {
+                              query: searchString, // required
+                              format: format ?? undefined,
+                              year: year ?? undefined,
+                              season: season ?? undefined,
+                              airing_status: airing_status ?? undefined,
+                              country_of_origin: country_of_origin ?? undefined,
+                              source_material: source_material ?? undefined,
+                              genres: genres ?? undefined,
+                            };
+                          },
                         });
                       }}
                     >
