@@ -295,7 +295,18 @@ export const getAnimeDetails = gql`
   }
 `;
 export const getSearchResults = gql`
-  query ($search: String, $page: Int) {
+  query (
+    $search: String
+    $page: Int
+
+    $seasonYear: Int
+    $season: MediaSeason
+    $format: MediaFormat
+    $status: MediaStatus
+    $countryOfOrigin: CountryCode
+    $source: MediaSource
+    $genre_in: [String]
+  ) {
     Page(page: $page, perPage: 30) {
       pageInfo {
         hasNextPage
@@ -304,7 +315,19 @@ export const getSearchResults = gql`
         currentPage
         lastPage
       }
-      media(search: $search, type: ANIME) {
+
+      media(
+        search: $search
+        type: ANIME
+
+        seasonYear: $seasonYear
+        season: $season
+        format: $format
+        status: $status
+        countryOfOrigin: $countryOfOrigin
+        source: $source
+        genre_in: $genre_in
+      ) {
         id
         genres
         description
@@ -331,6 +354,7 @@ export const getSearchResults = gql`
     }
   }
 `;
+
 
 export type TSearchResponse = {
   Page: {
