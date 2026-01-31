@@ -284,13 +284,50 @@ export const getAnimeDetails = gql`
       status
       format
       season
+      nextAiringEpisode {
+        id
+        airingAt
+        timeUntilAiring
+        episode
+        mediaId
+      }
     }
   }
 `;
 export const getSearchResults = gql`
-  query ($search: String, $page: Int) {
+  query (
+    $search: String
+    $page: Int
+
+    $seasonYear: Int
+    $season: MediaSeason
+    $format: MediaFormat
+    $status: MediaStatus
+    $countryOfOrigin: CountryCode
+    $source: MediaSource
+    $genre_in: [String]
+  ) {
     Page(page: $page, perPage: 30) {
-      media(search: $search, type: ANIME) {
+      pageInfo {
+        hasNextPage
+        total
+        perPage
+        currentPage
+        lastPage
+      }
+
+      media(
+        search: $search
+        type: ANIME
+
+        seasonYear: $seasonYear
+        season: $season
+        format: $format
+        status: $status
+        countryOfOrigin: $countryOfOrigin
+        source: $source
+        genre_in: $genre_in
+      ) {
         id
         genres
         description
@@ -317,6 +354,7 @@ export const getSearchResults = gql`
     }
   }
 `;
+
 
 export type TSearchResponse = {
   Page: {
@@ -539,5 +577,12 @@ export type TAnimeDetailsResponse = {
     status: TStatus;
     format: TMediaFormat;
     season: TSeason;
+    nextAiringEpisode:{
+        id:number;
+        airingAt:number;
+        timeUntilAiring:number
+        episode:number;
+        mediaId:number
+      }
   };
 };

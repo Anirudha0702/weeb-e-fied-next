@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { House, MoveRight } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
+import { useState } from "react";
 export const Route = createFileRoute("/")({
   component: Index,
 });
@@ -21,7 +22,7 @@ function Index() {
     "Bleach",
   ];
   const navigate = useNavigate();
-
+  const [searchString, setSearchString] = useState("");
   return (
     <div className=" relative w-full bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
       <img
@@ -58,7 +59,40 @@ function Index() {
                   alt=""
                   className="my-14"
                 />
-                <Input type="text" placeholder="Search for anime..." />
+                <Input
+                  type="text"
+                  placeholder="Search for anime..."
+                  value={searchString}
+                  onKeyDown={(e) => {
+                    if (e.key !== "Enter") return;
+                    navigate({
+                      to: "/search",
+                      search: (prev) => {
+                        const {
+                          format,
+                          year,
+                          season,
+                          airing_status,
+                          country_of_origin,
+                          source_material,
+                          genres,
+                        } = prev;
+
+                        return {
+                          query: searchString, // required
+                          format: format ?? undefined,
+                          year: year ?? undefined,
+                          season: season ?? undefined,
+                          airing_status: airing_status ?? undefined,
+                          country_of_origin: country_of_origin ?? undefined,
+                          source_material: source_material ?? undefined,
+                          genres: genres ?? undefined,
+                        };
+                      },
+                    });
+                  }}
+                  onChange={(e) => setSearchString(e.target.value)}
+                />
                 <Button
                   className="w-32 rounded-full mt-4 mx-auto flex "
                   onClick={() =>
@@ -78,6 +112,33 @@ function Index() {
                     <span
                       key={index}
                       className="mr-2 hover:text-primary cursor-pointer"
+                      onClick={() => {
+                        navigate({
+                          to: "/search",
+                          search: (prev) => {
+                            const {
+                              format,
+                              year,
+                              season,
+                              airing_status,
+                              country_of_origin,
+                              source_material,
+                              genres,
+                            } = prev;
+
+                            return {
+                              query: searchString, // required
+                              format: format ?? undefined,
+                              year: year ?? undefined,
+                              season: season ?? undefined,
+                              airing_status: airing_status ?? undefined,
+                              country_of_origin: country_of_origin ?? undefined,
+                              source_material: source_material ?? undefined,
+                              genres: genres ?? undefined,
+                            };
+                          },
+                        });
+                      }}
                     >
                       {item},
                     </span>

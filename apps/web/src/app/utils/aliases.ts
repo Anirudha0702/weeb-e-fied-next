@@ -1,4 +1,4 @@
-import { TStatus } from "../types";
+import { type TStatus } from "../types/types";
 
 export const status: Record<string, TStatus> = {
   RELEASING: "RELEASING",

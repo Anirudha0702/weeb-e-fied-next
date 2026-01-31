@@ -1,16 +1,10 @@
+import { genres } from "@/app/utils/constants";
 import { useNavigate } from "@tanstack/react-router";
 import { Folders, ChevronDown, ChevronUp } from "lucide-react";
 import { useEffect, useState } from "react";
 
 function Genres() {
-  const genres = [
-    "Action","Adventure","Cars","Comedy","Dementia","Demons","Drama","Ecchi",
-    "Fantasy","Game","Harem","Historical","Horror","Isekai","Josei","Kids",
-    "Magic","Martial Arts","Mecha","Military","Music","Mystery","Parody",
-    "Police","Psychological","Romance","Samurai","School","Sci-Fi","Seinen",
-    "Shoujo","Shoujo Ai","Shounen","Shounen Ai","Slice of Life","Space",
-    "Sports","Super Power","Supernatural","Thriller","Vampire",
-  ];
+  
 
   const [expanded, setExpanded] = useState(false);
   const [isXL, setIsXL] = useState(false);

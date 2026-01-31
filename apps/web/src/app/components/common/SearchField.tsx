@@ -39,10 +39,28 @@ function Search() {
               setOpen(false);
               navigate({
                 to: "/search",
-                search: (prev) => ({
-                  ...prev,
-                  query: searchString,
-                }),
+                search: (prev) => {
+                  const {
+                    format,
+                    year,
+                    season,
+                    airing_status,
+                    country_of_origin,
+                    source_material,
+                    genres,
+                  } = prev;
+
+                  return {
+                    query: searchString, // required
+                    format: format ?? undefined,
+                    year: year ?? undefined,
+                    season: season ?? undefined,
+                    airing_status: airing_status ?? undefined,
+                    country_of_origin: country_of_origin ?? undefined,
+                    source_material: source_material ?? undefined,
+                    genres: genres ?? undefined,
+                  };
+                },
               });
             }}
           />
@@ -77,11 +95,10 @@ function Search() {
             <div
               key={anime.id}
               className="p-2 rounded-md cursor-pointer hover:bg-accent grid grid-cols-[4rem_1fr] gap-2"
-              onClick={() =>
-                navigate({
-                  to: `/info/${anime.id}`,
-                })
-              }
+              onPointerDown={() => {
+                setOpen(false);
+                navigate({ to: `/info/${anime.id}` });
+              }}
             >
               <div className="relative  h-full w-16 shrink-0 grow-0">
                 <img
