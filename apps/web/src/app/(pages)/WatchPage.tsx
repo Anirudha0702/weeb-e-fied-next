@@ -5,6 +5,8 @@ import AnimeDetails from "../components/info/AnimeDetails";
 import { useStreamLinks } from "../hooks/useStreamLinks";
 import { getTitle } from "../utils/Functions";
 import { useEffect, useState } from "react";
+import Player from "../components/watch/Player";
+import Comments from "../components/watch/Comments";
 
 function WatchPage() {
   const params = useParams({
@@ -25,7 +27,6 @@ function WatchPage() {
   const navigate = useNavigate();
   const [src, setSrc] = useState<string | undefined>(undefined);
   const [sub, setSub] = useState(true);
-  const [iframeError, setIFrameError] = useState(false);
   const handleEpisodeChange = (event: React.MouseEvent<HTMLDivElement>) => {
     // Extract data-ep attribute
     const ep = Number(event.currentTarget.dataset.ep);
@@ -49,7 +50,7 @@ function WatchPage() {
     const timer = setTimeout(() => setSrc(link), 100);
     return () => clearTimeout(timer);
   }, [stream, sub]);
-  if (isLoading || !info || !stream || _isLoading) {
+  if (isLoading ||  !stream || _isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center w-full shrink-0 ">
         <div className="flex gap-2">
@@ -102,31 +103,7 @@ function WatchPage() {
 
   return (
     <div>
-      {!iframeError ? (
-        <iframe
-          key={src}
-          className="mt-20 w-full h-[70svh]"
-          src={src}
-          allow="fullscreen"
-          allowFullScreen
-          onError={() => {
-            setIFrameError(true);
-          }}
-        ></iframe>
-      ) : (
-        <div className="h-[70svh] flex flex-col items-center justify-center gap-4 bg-black text-white">
-          <img src="/images/error-loli-xs.gif" className="h-32 aspect-square" />
-          <p className="text-sm opacity-80">Failed to load video player</p>
-
-          <Button
-            onClick={() => {
-              window.location.reload();
-            }}
-          >
-            Retry
-          </Button>
-        </div>
-      )}
+      <Player url={src}/>
       <div className="flex flex-wrap gap-2 mt-4">
         {stream?.links.sub && (
           <div
@@ -180,7 +157,8 @@ function WatchPage() {
         ))}
       </div>
 
-      <AnimeDetails metadata={info.Media} />
+     {info&& <AnimeDetails metadata={info.Media} showCharacters={false}/>} 
+     <Comments animeId={id} episode={selectedep}/>
     </div>
   );
 }

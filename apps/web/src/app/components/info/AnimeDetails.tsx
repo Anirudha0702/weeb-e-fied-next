@@ -17,9 +17,14 @@ import { useState } from "react";
 interface IAnimeDetails {
   metadata: TAnimeDetailsResponse["Media"];
   showWatchNow?: boolean;
+  showCharacters?: boolean;
 }
 
-function AnimeDetails({ metadata, showWatchNow }: IAnimeDetails) {
+function AnimeDetails({
+  metadata,
+  showWatchNow,
+  showCharacters = true,
+}: IAnimeDetails) {
   const [showAll, setShowAll] = useState(false);
   const characters = metadata.characters.nodes;
   const visibleCharacters = characters.slice(0, 6);
@@ -111,7 +116,7 @@ function AnimeDetails({ metadata, showWatchNow }: IAnimeDetails) {
             dangerouslySetInnerHTML={{ __html: metadata.description }}
           />
 
-          {visibleCharacters.length > 0 && (
+          {visibleCharacters.length > 0 && showCharacters && (
             <>
               <h2 className="text-2xl font-semibold my-6 ">
                 Characters & Voice Actors
