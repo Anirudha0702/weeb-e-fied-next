@@ -5,7 +5,7 @@ import { getTitle } from "../utils/Functions";
 import Banner from "../components/info/Banner";
 import { Button } from "@/components/ui/button";
 import AnimeDetails from "../components/info/AnimeDetails";
-
+import SEO from "../components/common/SEO";
 function AnimeInfo() {
   const params = useParams({
     from: "/_layout/info/$id",
@@ -67,6 +67,12 @@ function AnimeInfo() {
 
   return (
     <div className=" pt-20 w-full">
+      <SEO
+        title={getTitle(info.Media.title)}
+        description=""
+        name="Info"
+        type=""
+      />
       <Breadcrumb
         items={[
           { label: "Home", href: "/home" },
@@ -87,7 +93,7 @@ function AnimeInfo() {
             : null
         }
       />
-      <AnimeDetails metadata={info.Media} showWatchNow/>
+      <AnimeDetails metadata={info.Media} showWatchNow />
     </div>
   );
 }
