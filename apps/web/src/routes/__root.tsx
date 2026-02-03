@@ -2,6 +2,7 @@ import useAuthStore from "@/app/store/authStore";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { Toaster } from "@/components/ui/sonner"
 // import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 function RootLayout() {
   const { setAuth } = useAuthStore();
@@ -12,7 +13,7 @@ function RootLayout() {
         credentials: "include",
       });
       if (refreshRes.ok) {
-        const { data } = await refreshRes.json();
+        const data  = await refreshRes.json();
         setAuth(data);
       }
     })();
@@ -21,6 +22,7 @@ function RootLayout() {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Outlet />
       {/* <TanStackRouterDevtools /> */}
+      <Toaster/>
     </ThemeProvider>
   );
 }

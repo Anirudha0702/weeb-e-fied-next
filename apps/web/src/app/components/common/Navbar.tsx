@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import { Menu, User } from "lucide-react";
+import { Menu, } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -9,14 +9,13 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import Sidebar from "./Sidebar";
 import Search from "./SearchField";
 import useAuthStore from "@/app/store/authStore";
+import Auth from "./Auth";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar";
 function Navbar() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
@@ -49,7 +48,14 @@ function Navbar() {
           <Popover>
             <PopoverTrigger>
               {" "}
-              <User />
+              <Avatar>
+                <AvatarImage
+                  src={user.profilePicture || "https://github.com/shadcn.png"}
+                  alt="@evilrabbit"
+                />
+                <AvatarFallback>ER</AvatarFallback>
+                <AvatarBadge className="bg-green-600 dark:bg-green-800" />
+              </Avatar>
             </PopoverTrigger>
             <PopoverContent>
               <ol>
@@ -60,20 +66,7 @@ function Navbar() {
             </PopoverContent>
           </Popover>
         ) : (
-          <Dialog>
-            <DialogTrigger>
-              <User />
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Are you absolutely sure?</DialogTitle>
-                <DialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+          <Auth />
         )}
       </div>
     </div>
