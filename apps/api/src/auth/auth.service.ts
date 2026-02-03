@@ -24,7 +24,9 @@ export class AuthService {
 
   async signup(userInfo: SignupDTO): Promise<InternalUser> {
     try {
+      console.log('ee');
       const existing = await this.userService.findOneByEmail(userInfo.email);
+      console.log('ee');
       if (existing)
         throw new ConflictException('This email is already registered');
       const user = await this.userService.create(userInfo);
@@ -50,7 +52,6 @@ export class AuthService {
         email: existing.email,
         name: existing.name,
         id: existing.id,
-        privacy: existing.privacy,
       };
       const accessToken = this.jwt.createToken(payload, 'access', 60 * 5);
       const refreshToken = this.jwt.createToken(

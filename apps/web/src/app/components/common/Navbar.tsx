@@ -8,8 +8,18 @@ import {
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import Sidebar from "./Sidebar";
 import Search from "./SearchField";
+import useAuthStore from "@/app/store/authStore";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 function Navbar() {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
 
   return (
     <div className="h-16 bg-muted flex items-center px-4 shadow-sm fixed top-0 w-full z-100">
@@ -35,19 +45,36 @@ function Navbar() {
       <Search />
 
       <div className="ml-auto">
-        <Popover>
-          <PopoverTrigger>
-            {" "}
-            <User />
-          </PopoverTrigger>
-          <PopoverContent>
-            <ol>
-              <li>Profile</li>
-              <li>Settings</li>
-              <li>Logout</li>
-            </ol>
-          </PopoverContent>
-        </Popover>
+        {user ? (
+          <Popover>
+            <PopoverTrigger>
+              {" "}
+              <User />
+            </PopoverTrigger>
+            <PopoverContent>
+              <ol>
+                <li>Profile</li>
+                <li>Settings</li>
+                <li>Logout</li>
+              </ol>
+            </PopoverContent>
+          </Popover>
+        ) : (
+          <Dialog>
+            <DialogTrigger>
+              <User />
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Are you absolutely sure?</DialogTitle>
+                <DialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your account and remove your data from our servers.
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
     </div>
   );

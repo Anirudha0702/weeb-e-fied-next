@@ -23,6 +23,7 @@ import { AppLogger } from './common/logger/app.logger';
 import { LoggerModule } from './common/logger/logger.module';
 import { CommentModule } from './comment/comment.module';
 import { LikeModule } from './like/like.module';
+import { AuthController } from './auth/auth.controller';
 
 @Module({
   imports: [
@@ -47,7 +48,7 @@ import { LikeModule } from './like/like.module';
     CommentModule,
     LikeModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, AuthController],
   providers: [
     AppService,
     AuthService,

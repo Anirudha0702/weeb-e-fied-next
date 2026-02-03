@@ -21,10 +21,7 @@ export class AuthController {
 
   // POST /auth/signup
   @Post('signup')
-  async register(
-    @Body(new ValidationPipe({ transform: true, whitelist: true }))
-    payload: SignupDTO,
-  ) {
+  async register(@Body() payload: SignupDTO) {
     return await this.authService.signup(payload);
   }
   // POST /auth/login
