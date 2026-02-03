@@ -27,6 +27,9 @@ export class Comment {
   @Column({ type: 'text' })
   content: string;
 
+  @Column({ type: 'text', default: null })
+  gif: string | null;
+
   @Column({ type: 'uuid', nullable: true })
   postId: string | null;
 
