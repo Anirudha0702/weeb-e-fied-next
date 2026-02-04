@@ -53,3 +53,11 @@ export const loginDataSchema = z.object({
 export const loginResponseSchema = loginDataSchema;
 
 export type LoginResponse = z.infer<typeof loginResponseSchema>;
+
+
+export const logoutDataSchema = z.object({
+  message:z.string()
+});
+export const logoutResponseSchema=logoutDataSchema
+
+export type LogoutResponse = z.infer<typeof logoutResponseSchema>;
