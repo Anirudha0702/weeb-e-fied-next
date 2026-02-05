@@ -20,7 +20,7 @@ import {
   EmojiPickerFooter,
   EmojiPickerSearch,
 } from "@/components/ui/emoji-picker";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent} from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useForm } from "@tanstack/react-form";
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
@@ -30,11 +30,20 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@/components/ui/input-group";
+import { useApiMutation } from "@/app/hooks/useApi";
+import { commentResponse, type TComment } from "@/app/types/types";
+import { toast } from "sonner";
+import useAuthStore from "@/app/store/authStore";
 const formSchema = z.object({
-  comment: z
-    .string()
-    .min(10, ),
+  comment: z.string().min(10),
 });
+const commentSchema = z.object({
+  comment: z.string(),
+  target: z.literal(["EPISODE", "POST"]),
+  episodeId: z.string(),
+  createdBy: z.uuid(),
+});
+type ComentRequest = z.infer<typeof commentSchema>;
 
 interface IComments {
   animeId: string;
@@ -44,6 +53,23 @@ type SortType = "new" | "old";
 function Comments({ animeId, episode }: IComments) {
   const [sortByNew, setSortByNew] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useAuthStore();
+  const comment = useApiMutation<TComment, ComentRequest>(
+    {
+      endpoint: "/comment/create",
+      method: "POST",
+      responseSchema: commentResponse,
+      payloadSchema: commentSchema,
+    },
+    {
+      onSuccess: () => {
+        toast.success("Comment added successfully");
+      },
+      onError: () => {
+        toast.error("Failed to post comment");
+      },
+    },
+  );
   const form = useForm({
     defaultValues: {
       comment: "",
@@ -52,6 +78,12 @@ function Comments({ animeId, episode }: IComments) {
       onSubmit: formSchema,
     },
     onSubmit: async ({ value }) => {
+      comment.mutate({
+        comment: value.comment,
+        target: "EPISODE",
+        createdBy: user!.id,
+        episodeId:`${animeId}_${episode}`
+      });
     },
   });
   const changeSort = (e: React.MouseEvent<HTMLLIElement>) => {
@@ -137,14 +169,16 @@ function Comments({ animeId, episode }: IComments) {
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
               <form
-                className="w-full flex  gap-2"
+                className="w-full flex flex-col gap-3"
                 id="leave-comment"
                 onSubmit={(e) => {
                   e.preventDefault();
+                  console.log("ds")
                   form.handleSubmit();
                 }}
               >
-                <FieldGroup>
+                <div className="w-full flex  gap-2">
+                  <FieldGroup>
                   <form.Field
                     name="comment"
                     children={(field) => {
@@ -202,9 +236,22 @@ function Comments({ animeId, episode }: IComments) {
                     </EmojiPicker>
                   </PopoverContent>
                 </Popover>
+                </div>
+                <Field orientation="horizontal" className="justify-end pr-7">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => form.reset()}
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" >
+                  Comment
+                </Button>
+              </Field>
               </form>
             </CardContent>
-            <CardFooter className="self-end px-0">
+            {/* <CardFooter className="self-end px-0">
               <Field orientation="horizontal">
                 <Button
                   type="button"
@@ -217,7 +264,7 @@ function Comments({ animeId, episode }: IComments) {
                   Comment
                 </Button>
               </Field>
-            </CardFooter>
+            </CardFooter> */}
           </Card>
         </div>
       </div>

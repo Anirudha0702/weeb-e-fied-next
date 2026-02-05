@@ -1,3 +1,4 @@
+import useAuthStore from "../store/authStore";
 import type { ApiConfig, ApiError } from "../types/api";
 import {
   useQuery,
@@ -48,31 +49,50 @@ export const fetchApi = async <TResponse, TPayload = undefined>(
     ? endpoint
     : `/${endpoint}`;
   const url = buildUrl(`${API_BASE_URL}${normalizedEndpoint}`, queryParams);
-
-  // const defaultHeaders = {
-  //   "Content-Type": "application/json",
-  //   ...headers,
-  // };
-
-  // const response = await fetch(url, {
-  //   method,
-  //   headers: defaultHeaders,
-  //   body: payload ? JSON.stringify(payload) : undefined,
-  //   credentials: "include",
-  // });
-  const isFormData = payload instanceof FormData;
-
-  const finalHeaders = {
-    ...(isFormData ? {} : { "Content-Type": "application/json" }),
-    ...headers,
+const makeRequest = async (): Promise<Response> => {
+    const isFormData = payload instanceof FormData;
+    const token = useAuthStore.getState().token;
+    const finalHeaders = {
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
+      ...headers,
+      ...(token ? { authorization: `Bearer ${token}` } : {}),
+    };
+    return fetch(url, {
+      method,
+      headers: finalHeaders,
+      body: isFormData
+        ? payload
+        : payload
+          ? JSON.stringify(payload)
+          : undefined,
+      credentials: "include",
+    });
   };
+  let response = await makeRequest();
+  if (response.status === 401 && normalizedEndpoint !== "/auth/login") {
+    try {
+      const refreshRes = await fetch(`/api/auth/get-token`, {
+        method: "GET",
+        credentials: "include",
+      });
 
-  const response = await fetch(url, {
-    method,
-    headers: finalHeaders,
-    body: isFormData ? payload : payload ? JSON.stringify(payload) : undefined,
-    credentials: "include",
-  });
+      if (refreshRes.ok) {
+        const data = await refreshRes.json();
+        if (data?.token)
+          useAuthStore.getState().setToken(data.token);
+
+        response = await makeRequest();
+      } else {
+        throw new Error("Token refresh failed");
+      }
+    } catch (e) {
+      console.error("Token refresh error:", e);
+      throw {
+        message: "Session expired. Please log in again.",
+        status: 401,
+      } as ApiError;
+    }
+  }
   if (!response.ok) {
     const fallbackMessages: Record<number, string> = {
       400: "Invalid request. Please check your input.",

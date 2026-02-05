@@ -8,3 +8,11 @@ export class CreateUserDto {
   coverPicture?: string;
   verified?: boolean;
 }
+export interface JwtUser {
+  id: string;
+  email: string;
+  name: string;
+  type: string;
+  iat: number;
+  exp: number;
+}
