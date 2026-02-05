@@ -41,7 +41,7 @@ export class InternalUser {
   bio?: string;
   dateOfBirth?: Date;
   isVerified: boolean;
-  isActive: boolean;
+  isBlocked: boolean;
   createdAt: Date;
   updatedAt: Date;
   lastLogin?: Date;
@@ -56,11 +56,10 @@ export class InternalUser {
     this.bio = user.bio;
     this.dateOfBirth = user.dateOfBirth;
     this.isVerified = user.isVerified;
-    this.isActive = user.isActive;
+    this.isBlocked = user.isBlocked;
     this.createdAt = user.createdAt;
     this.updatedAt = user.updatedAt;
     this.lastLogin = user.lastLogin;
-    this.privacy = user.privacy;
     this.coverPicture = user.coverPicture;
     this.gender = user.gender;
   }
