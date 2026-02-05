@@ -2,14 +2,15 @@ import { Controller, Post, Body, ValidationPipe } from '@nestjs/common';
 import { OtpService } from './otp.service';
 import { CreateOtpDto, VerifyOtpDto } from './dto/otp.dto';
 import { EmailService } from '../email/email.service';
+import { Public } from '@/common/decorators/public/public.decorator';
 
 @Controller('otp')
+@Public()
 export class OtpController {
   constructor(
     private readonly otpService: OtpService,
     private readonly emailService: EmailService,
   ) {}
-
   @Post('/generate')
   async generate(
     @Body(new ValidationPipe({ whitelist: true, transform: true }))

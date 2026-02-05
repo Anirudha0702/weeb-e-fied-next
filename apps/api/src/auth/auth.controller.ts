@@ -13,7 +13,6 @@ import { SigninDTO, SignupDTO } from './dto/auth.dto';
 import { type Request, type Response } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { Public } from '../common/decorators/public/public.decorator';
-
 @Public()
 @Controller('auth') // Base route: /auth
 export class AuthController {
@@ -21,10 +20,7 @@ export class AuthController {
 
   // POST /auth/signup
   @Post('signup')
-  async register(
-    @Body(new ValidationPipe({ transform: true, whitelist: true }))
-    payload: SignupDTO,
-  ) {
+  async register(@Body() payload: SignupDTO) {
     return await this.authService.signup(payload);
   }
   // POST /auth/login
@@ -35,6 +31,14 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     return await this.authService.signin(credential, res);
+  }
+  @Public()
+  @Post('verify')
+  async verify(@Req() request: Request) {
+    const refreshToken = request.cookies['utopia_refreshToken'] as
+      | string
+      | undefined;
+    return this.authService.verify(refreshToken);
   }
   @Get('google')
   @UseGuards(AuthGuard('google'))

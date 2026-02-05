@@ -24,7 +24,9 @@ export class AuthService {
 
   async signup(userInfo: SignupDTO): Promise<InternalUser> {
     try {
+      console.log('ee');
       const existing = await this.userService.findOneByEmail(userInfo.email);
+      console.log('ee');
       if (existing)
         throw new ConflictException('This email is already registered');
       const user = await this.userService.create(userInfo);
@@ -50,7 +52,6 @@ export class AuthService {
         email: existing.email,
         name: existing.name,
         id: existing.id,
-        privacy: existing.privacy,
       };
       const accessToken = this.jwt.createToken(payload, 'access', 60 * 5);
       const refreshToken = this.jwt.createToken(
@@ -146,6 +147,27 @@ export class AuthService {
       };
     } catch (error: unknown) {
       if (error instanceof HttpException) throw error;
+      throw new InternalServerErrorException(
+        error instanceof Error ? error.message : 'An unexpected error occurred',
+      );
+    }
+  }
+  async verify(token: string | undefined) {
+    try {
+      if (!token) throw new UnauthorizedException('Missing or invalid token');
+      const payload = this.jwt.verifyToken<{
+        id: string;
+        email: string;
+        name: string;
+        privacy: string;
+      }>(token);
+      if (!payload) {
+        throw new UnauthorizedException('Invalid token');
+      }
+      return await this.userService.verify(payload.id);
+    } catch (error) {
+      if (error instanceof HttpException) throw error;
+
       throw new InternalServerErrorException(
         error instanceof Error ? error.message : 'An unexpected error occurred',
       );

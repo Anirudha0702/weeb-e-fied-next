@@ -6,7 +6,7 @@ import {
   type UseMutationOptions,
 } from "@tanstack/react-query";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "");
+const API_BASE_URL = import.meta.env.VITE_APP_BACKEND?.replace(/\/$/, "");
 
 const buildUrl = (
   endpoint: string,
