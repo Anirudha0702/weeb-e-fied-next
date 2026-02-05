@@ -127,7 +127,7 @@ function Index() {
                             } = prev;
 
                             return {
-                              query: searchString, // required
+                              query: item, // required
                               format: format ?? undefined,
                               year: year ?? undefined,
                               season: season ?? undefined,

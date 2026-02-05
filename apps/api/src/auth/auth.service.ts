@@ -152,4 +152,25 @@ export class AuthService {
       );
     }
   }
+  async verify(token: string | undefined) {
+    try {
+      if (!token) throw new UnauthorizedException('Missing or invalid token');
+      const payload = this.jwt.verifyToken<{
+        id: string;
+        email: string;
+        name: string;
+        privacy: string;
+      }>(token);
+      if (!payload) {
+        throw new UnauthorizedException('Invalid token');
+      }
+      return await this.userService.verify(payload.id);
+    } catch (error) {
+      if (error instanceof HttpException) throw error;
+
+      throw new InternalServerErrorException(
+        error instanceof Error ? error.message : 'An unexpected error occurred',
+      );
+    }
+  }
 }

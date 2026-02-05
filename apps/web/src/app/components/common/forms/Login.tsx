@@ -10,6 +10,8 @@ import {
   type LoginResponse,
 } from "@/app/types/api";
 import useAuthStore from "@/app/store/authStore";
+import { useState } from "react";
+import { Eye, EyeClosed } from "lucide-react";
 const loginFormSchema = z.object({
   email: z.email(),
   password: z.string(),
@@ -17,6 +19,7 @@ const loginFormSchema = z.object({
 type loginTypes = z.infer<typeof loginFormSchema>;
 function Login() {
   const { setAuth } = useAuthStore();
+  const [showPassword, setShowPassword] = useState(false);
   const mutation = useApiMutation<LoginResponse, loginTypes>(
     {
       endpoint: "/auth/login",
@@ -58,6 +61,9 @@ function Login() {
       mutation.mutate(value);
     },
   });
+  const setVisiblity = () => {
+    setShowPassword(!showPassword);
+  };
 
   return (
     <form
@@ -90,14 +96,33 @@ function Login() {
       <form.Field
         name="password"
         children={(field) => (
+          // <div>
+          //   <input
+          //     type="password"
+          //     className="border p-2 w-full"
+          //     placeholder="Password"
+          //     value={field.state.value}
+          //     onChange={(e) => field.handleChange(e.target.value)}
+          //   />
+          //   {field.state.meta.errors?.length ? (
+          //     <p className="text-red-500 text-sm">
+          //       {field.state.meta.errors[0]?.message}
+          //     </p>
+          //   ) : null}
+          // </div>
           <div>
-            <input
-              type="password"
-              className="border p-2 w-full"
-              placeholder="Password"
-              value={field.state.value}
-              onChange={(e) => field.handleChange(e.target.value)}
-            />
+            <div className="flex items-center gap-2 border focus-within:outline-2 focus-within:outline-white rounded-xs focus-within:border-2 focus-within:border-primary cursor-pointer">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="border p-2 w-full border-none focus:border-none focus:outline-none"
+                placeholder="Password"
+                value={field.state.value}
+                onChange={(e) => field.handleChange(e.target.value)}
+              />
+              <div className="mr-2" onClick={() => setVisiblity()}>
+                {showPassword ? <Eye size={16} /> : <EyeClosed size={16} />}
+              </div>
+            </div>
             {field.state.meta.errors?.length ? (
               <p className="text-red-500 text-sm">
                 {field.state.meta.errors[0]?.message}
@@ -118,7 +143,7 @@ function Login() {
           Or continue with
         </span>
       </div>
-      <OAuthButtons />
+      <OAuthButtons disabled />
     </form>
   );
 }

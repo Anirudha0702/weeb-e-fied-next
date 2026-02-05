@@ -154,4 +154,23 @@ export class UserService {
       relations: options?.relations,
     });
   }
+  async verify(id: string) {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { id },
+      });
+
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+
+      user.isVerified = true;
+      await this.userRepository.save(user);
+      return { verified: true };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        error instanceof Error ? error.message : 'An unexpected error occurred',
+      );
+    }
+  }
 }

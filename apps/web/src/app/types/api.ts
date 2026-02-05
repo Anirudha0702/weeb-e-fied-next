@@ -1,4 +1,4 @@
-import {  z } from "zod";
+import { z } from "zod";
 
 export interface ApiConfig<TResponse, TPayload = undefined> {
   endpoint: string;
@@ -41,7 +41,7 @@ export const registerDataSchema = z.object({
 });
 
 // Composed Endpoint Schemas
-export const registerResponseSchema = registerDataSchema;
+export const registerResponseSchema = AuthserResponse;
 
 //Inferred Types
 export type RegisterResponse = z.infer<typeof registerResponseSchema>;
@@ -54,10 +54,35 @@ export const loginResponseSchema = loginDataSchema;
 
 export type LoginResponse = z.infer<typeof loginResponseSchema>;
 
-
 export const logoutDataSchema = z.object({
-  message:z.string()
+  message: z.string(),
 });
-export const logoutResponseSchema=logoutDataSchema
+export const logoutResponseSchema = logoutDataSchema;
 
 export type LogoutResponse = z.infer<typeof logoutResponseSchema>;
+
+export const OTPSchema = z.object({
+  id: z.uuid(),
+  email: z.email(),
+  otpHash: z.string(),
+  createdAt: z.coerce.date(),
+  expiresAt: z.coerce.date(),
+});
+
+export const generateOTPResponseSchema = OTPSchema;
+
+export type GenerateOTPResponse = z.infer<typeof generateOTPResponseSchema>;
+export const verifyOTPDataSchema = z.object({
+  verified: z.boolean(),
+  email: z.email(),
+});
+export const verifyOTPResponseSchema = verifyOTPDataSchema;
+
+export type VerifyOTPResponse = z.infer<typeof verifyOTPResponseSchema>;
+
+export const verifyUserSchema = z.object({
+  verified: z.boolean(),
+});
+
+export const VerifyUserResponseSchema = verifyUserSchema;
+export type VerifyUserResponse = z.infer<typeof VerifyUserResponseSchema>;
