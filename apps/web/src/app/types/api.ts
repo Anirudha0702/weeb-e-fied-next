@@ -1,4 +1,4 @@
-import { z } from "zod";
+import * as z from "zod";
 
 export interface ApiConfig<TResponse, TPayload = undefined> {
   endpoint: string;
@@ -8,6 +8,7 @@ export interface ApiConfig<TResponse, TPayload = undefined> {
   payload?: TPayload;
   responseSchema?: z.ZodSchema<TResponse>;
   payloadSchema?: z.ZodSchema<TPayload>;
+  key?: string;
 }
 
 export interface ApiError {
@@ -86,3 +87,30 @@ export const verifyUserSchema = z.object({
 
 export const VerifyUserResponseSchema = verifyUserSchema;
 export type VerifyUserResponse = z.infer<typeof VerifyUserResponseSchema>;
+
+export const comment = z.object({
+  id: z.uuid(),
+  content: z.string(),
+  gif: z.string().nullable(),
+  postId: z.uuid().nullable(),
+  episodeId: z.string().nullable(),
+  parentId: z.string().nullable(),
+  userId: z.uuid(),
+  replyCount:z.number(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+});
+export const commentWithUser = comment.extend({
+  user: z.object({
+    id: z.uuid(),
+    name: z.string(),
+    profilePicture: z.string(),
+  }),
+});
+export type TcommentWithUser = z.infer<typeof commentWithUser>;
+export const allCommentsResponseSchema = z.object({
+  comments: z.array(commentWithUser),
+  nextCursor: z.string().nullable(),
+  hasNextPage: z.boolean(),
+});
+export type TAllCommentsResponse = z.infer<typeof allCommentsResponseSchema>;

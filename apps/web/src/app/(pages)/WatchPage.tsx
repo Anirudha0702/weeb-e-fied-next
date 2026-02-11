@@ -6,7 +6,7 @@ import { useStreamLinks } from "../hooks/useStreamLinks";
 import { getTitle } from "../utils/Functions";
 import { useEffect, useState } from "react";
 import Player from "../components/watch/Player";
-import Comments from "../components/watch/Comments";
+import Comments from "../components/watch/CommentSection";
 
 function WatchPage() {
   const params = useParams({

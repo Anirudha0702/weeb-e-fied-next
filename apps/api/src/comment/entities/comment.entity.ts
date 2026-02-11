@@ -41,7 +41,8 @@ export class Comment {
 
   @Column({ type: 'uuid' })
   userId: string;
-
+  @Column({ type: 'int', default: 0 })
+  replyCount: number;
   @ManyToOne(() => User, (user) => user.comments, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: User;

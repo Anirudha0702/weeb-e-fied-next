@@ -2,6 +2,7 @@ export class CreateUserDto {
   name: string;
   email: string;
   password: string;
+  username: string;
   age?: number;
   dateOfBirth?: string;
   profilePicture?: string; // optional

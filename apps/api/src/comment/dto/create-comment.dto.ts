@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import {
   IsOptional,
   IsString,
@@ -5,6 +6,10 @@ import {
   ValidateIf,
   IsNotEmpty,
   IsIn,
+  IsEnum,
+  IsInt,
+  Min,
+  Max,
 } from 'class-validator';
 
 export class CreateCommentDto {
@@ -34,4 +39,19 @@ export class CreateCommentDto {
   @IsNotEmpty()
   @IsUUID()
   postId?: string;
+}
+
+export class EpisodeCommentQueryDto {
+  @IsEnum(['new', 'old'])
+  @IsOptional()
+  sort?: 'new' | 'old' = 'new';
+
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(50)
+  limit: number = 20;
+
+  @IsOptional()
+  cursor?: string;
 }

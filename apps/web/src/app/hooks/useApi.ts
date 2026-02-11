@@ -5,13 +5,15 @@ import {
   useMutation,
   type UseQueryOptions,
   type UseMutationOptions,
+  useInfiniteQuery,
+  type InfiniteData,
 } from "@tanstack/react-query";
 
 const API_BASE_URL = import.meta.env.VITE_APP_BACKEND?.replace(/\/$/, "");
 
 const buildUrl = (
   endpoint: string,
-  queryParams?: Record<string, string | number | boolean>
+  queryParams?: Record<string, string | number | boolean>,
 ) => {
   if (!queryParams) return endpoint;
   const params = new URLSearchParams();
@@ -24,7 +26,7 @@ const buildUrl = (
 };
 
 export const fetchApi = async <TResponse, TPayload = undefined>(
-  config: ApiConfig<TResponse, TPayload>
+  config: ApiConfig<TResponse, TPayload>,
 ): Promise<TResponse> => {
   const {
     endpoint,
@@ -42,14 +44,14 @@ export const fetchApi = async <TResponse, TPayload = undefined>(
   }
   if (!API_BASE_URL) {
     throw new Error(
-      "API_BASE_URL is not defined. Check your .env and Vite config."
+      "API_BASE_URL is not defined. Check your .env and Vite config.",
     );
   }
   const normalizedEndpoint = endpoint.startsWith("/")
     ? endpoint
     : `/${endpoint}`;
   const url = buildUrl(`${API_BASE_URL}${normalizedEndpoint}`, queryParams);
-const makeRequest = async (): Promise<Response> => {
+  const makeRequest = async (): Promise<Response> => {
     const isFormData = payload instanceof FormData;
     const token = useAuthStore.getState().token;
     const finalHeaders = {
@@ -78,8 +80,7 @@ const makeRequest = async (): Promise<Response> => {
 
       if (refreshRes.ok) {
         const data = await refreshRes.json();
-        if (data?.token)
-          useAuthStore.getState().setToken(data.token);
+        if (data?.token) useAuthStore.getState().setToken(data.token);
 
         response = await makeRequest();
       } else {
@@ -130,11 +131,24 @@ const makeRequest = async (): Promise<Response> => {
   }
   return data;
 };
+export const fetchApiInfinite = async <TResponse, TPayload = undefined>(
+  config: ApiConfig<TResponse, TPayload>,
+  pageParam?: string | number,
+): Promise<TResponse> => {
+  const mergedQueryParams = {
+    ...config.queryParams,
+    ...(pageParam !== undefined ? { cursor: pageParam } : {}),
+  };
 
+  return fetchApi<TResponse, TPayload>({
+    ...config,
+    queryParams: mergedQueryParams,
+  });
+};
 // For GET / Query-based APIs
 export const useApi = <TResponse, TPayload = undefined>(
   config: ApiConfig<TResponse, TPayload>,
-  options?: Omit<UseQueryOptions<TResponse, ApiError>, "queryKey" | "queryFn">
+  options?: Omit<UseQueryOptions<TResponse, ApiError>, "queryKey" | "queryFn">,
 ) => {
   const queryKey = [
     config.endpoint,
@@ -152,11 +166,31 @@ export const useApi = <TResponse, TPayload = undefined>(
 
 export const useApiMutation = <TResponse, TPayload = undefined>(
   config: Omit<ApiConfig<TResponse, TPayload>, "payload">,
-  options?: UseMutationOptions<TResponse, ApiError, TPayload>
+  options?: UseMutationOptions<TResponse, ApiError, TPayload>,
 ) => {
   return useMutation<TResponse, ApiError, TPayload>({
     mutationFn: (payload: TPayload) =>
       fetchApi<TResponse, TPayload>({ ...config, payload }),
     ...options,
+  });
+};
+export const useApiInfinite = <TResponse, TPayload = undefined>(
+  config: ApiConfig<TResponse, TPayload>,
+) => {
+  const queryKey = config.key ? [config.key] : [config.endpoint, config.method];
+
+  return useInfiniteQuery<
+    TResponse,
+    ApiError,
+    InfiniteData<TResponse>,
+    (string | undefined)[],
+    string | undefined
+  >({
+    queryKey,
+    initialPageParam: undefined,
+    queryFn: ({ pageParam }) =>
+      fetchApiInfinite<TResponse, TPayload>(config, pageParam),
+    getNextPageParam: (lastPage) =>
+      lastPage.nextCursor ?? undefined,
   });
 };
