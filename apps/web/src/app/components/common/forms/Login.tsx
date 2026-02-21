@@ -26,6 +26,7 @@ function Login() {
       method: "POST",
       payloadSchema: loginFormSchema,
       responseSchema: loginResponseSchema,
+      key: ["login"],
     },
     {
       onSuccess: (data) => {
@@ -37,8 +38,8 @@ function Login() {
             name: user.name,
             id: user.id,
             email: user.email,
-            profilePicture: user.profilePicture ?? null,
-            coverPicture: user.coverPicture ?? null,
+            profilePicture: user.profilePicture ,
+            coverPicture: user.coverPicture ,
           },
         });
         toast.success("Login successful!");

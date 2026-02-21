@@ -90,6 +90,7 @@ function SignUp() {
       method: "POST",
       payloadSchema: loginFormSchema,
       responseSchema: loginResponseSchema,
+      key: ["login"],
     },
     {
       onSuccess: (data) => {
@@ -125,6 +126,7 @@ function SignUp() {
       method: "POST",
       payloadSchema: signupBaseSchema,
       responseSchema: registerResponseSchema,
+      key: ["register"],
     },
     {
       onSuccess: (data) => {
@@ -165,6 +167,7 @@ function SignUp() {
       method: "POST",
       payloadSchema: otpFormSchema,
       responseSchema: generateOTPResponseSchema,
+      key: ["generateOtp"],
     },
     {
       onSuccess: () => {
@@ -182,6 +185,7 @@ function SignUp() {
       method: "POST",
       payloadSchema: otpVerifySchema,
       responseSchema: verifyOTPResponseSchema,
+      key: ["verifyOtp"],
     },
     {
       onSuccess: () => {

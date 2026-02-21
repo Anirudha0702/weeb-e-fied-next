@@ -178,7 +178,7 @@ export const useApiMutation = <TResponse, TPayload = undefined>(
 export const useApiInfinite = <TResponse, TPayload = undefined>(
   config: ApiConfig<TResponse, TPayload>,
 ) => {
-  const queryKey = config.key 
+  const queryKey = config.key;
   const enabled = config.enable ?? true;
 
   return useInfiniteQuery<
@@ -194,7 +194,7 @@ export const useApiInfinite = <TResponse, TPayload = undefined>(
       fetchApiInfinite<TResponse, TPayload>(config, pageParam),
     enabled,
     getNextPageParam: (lastPage) =>
+      //@ts-ignore
       lastPage.nextCursor ?? undefined,
   });
 };
-
