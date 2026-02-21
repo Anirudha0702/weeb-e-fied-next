@@ -17,7 +17,7 @@ import { useState } from "react";
 import { useForm } from "@tanstack/react-form";
 
 import { useApiMutation } from "@/app/hooks/useApi";
-import {  comment as Comment, type TComment } from "@/app/types/types";
+import { comment as Comment, type TComment } from "@/app/types/types";
 import { toast } from "sonner";
 import * as z from "zod";
 import {
@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/popover";
 import { Smile } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import GiF from "../GiF";
 interface IComment {
   type: "EPISODE" | "POST";
   episodeId?: string;
@@ -47,16 +48,24 @@ const commentSchema = z.object({
 });
 type ComentRequest = z.infer<typeof commentSchema>;
 
-function CreateComment({ type, episodeId, isReply, parentId, onSuccess, onCancel }: IComment) {
+function CreateComment({
+  type,
+  episodeId,
+  isReply,
+  parentId,
+  onSuccess,
+  onCancel,
+}: IComment) {
   const { user } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
+  const [openGif, setOpenGif] = useState(false);
   const comment = useApiMutation<TComment, ComentRequest>(
     {
       endpoint: "/comment/create",
       method: "POST",
       responseSchema: Comment,
       payloadSchema: commentSchema,
-      key:isReply ? [`reply-${parentId}`] : [`comments-${episodeId}`],
+      key: isReply ? [`reply-${parentId}`] : [`comments-${episodeId}`],
     },
     {
       onSuccess: (data) => {
@@ -90,7 +99,7 @@ function CreateComment({ type, episodeId, isReply, parentId, onSuccess, onCancel
   const handleCancel = () => {
     form.reset();
     onCancel?.();
-  }
+  };
   const canRender =
     user && (!isReply || parentId) && (type !== "EPISODE" || episodeId);
 
@@ -168,6 +177,55 @@ function CreateComment({ type, episodeId, isReply, parentId, onSuccess, onCancel
               </EmojiPicker>
             </PopoverContent>
           </Popover>
+          <div className="">
+            <Popover onOpenChange={setOpenGif} open={openGif}>
+              <PopoverTrigger asChild>
+                <svg
+                  width={20}
+                  height={20}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="cursor-pointer"
+                >
+                  <rect
+                    width="24"
+                    height="24"
+                    rx="4"
+                    fill="none"
+                    stroke="#ffffff"
+                    strokeWidth="2"
+                  />
+                  <text
+                    x="12"
+                    y="16"
+                    textAnchor="middle"
+                    fontSize="10"
+                    fontWeight="bold"
+                    fill="#ffffff"
+                  >
+                    GIF
+                  </text>
+                </svg>
+              </PopoverTrigger>
+              <PopoverContent className="w-fit p-0">
+                {/* <EmojiPicker
+                  className="h-85.5 z-9999"
+                  onEmojiSelect={({ emoji }) => {
+                    form.setFieldValue(
+                      "comment",
+                      form.getFieldValue("comment") + emoji,
+                    );
+                  }}
+                >
+                  <EmojiPickerSearch />
+                  <EmojiPickerContent />
+                  <EmojiPickerFooter />
+                </EmojiPicker> */}
+                <GiF onSelect={(gif) => console.log(gif)} />
+              </PopoverContent>
+            </Popover>
+          </div>
         </div>
         <Field orientation="horizontal" className="justify-end pr-7">
           <Button type="button" variant="outline" onClick={handleCancel}>
