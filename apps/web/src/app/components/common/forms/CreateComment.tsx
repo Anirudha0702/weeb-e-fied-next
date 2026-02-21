@@ -17,7 +17,7 @@ import { useState } from "react";
 import { useForm } from "@tanstack/react-form";
 
 import { useApiMutation } from "@/app/hooks/useApi";
-import { commentResponse, type TComment } from "@/app/types/types";
+import {  comment as Comment, type TComment } from "@/app/types/types";
 import { toast } from "sonner";
 import * as z from "zod";
 import {
@@ -32,6 +32,8 @@ interface IComment {
   episodeId?: string;
   isReply?: boolean;
   parentId?: string;
+  onSuccess?: (data: TComment) => void;
+  onCancel?: () => void;
 }
 const formSchema = z.object({
   comment: z.string().min(10),
@@ -41,25 +43,30 @@ const commentSchema = z.object({
   target: z.literal(["EPISODE", "POST"]),
   episodeId: z.string(),
   createdBy: z.uuid(),
+  parentId: z.string().nullable(),
 });
 type ComentRequest = z.infer<typeof commentSchema>;
 
-function CreateComment({ type, episodeId, isReply, parentId }: IComment) {
+function CreateComment({ type, episodeId, isReply, parentId, onSuccess, onCancel }: IComment) {
   const { user } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const comment = useApiMutation<TComment, ComentRequest>(
     {
       endpoint: "/comment/create",
       method: "POST",
-      responseSchema: commentResponse,
+      responseSchema: Comment,
       payloadSchema: commentSchema,
+      key:isReply ? [`reply-${parentId}`] : [`comments-${episodeId}`],
     },
     {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toast.success("Comment added successfully");
+        form.reset();
+        onSuccess?.(data);
       },
       onError: () => {
         toast.error("Failed to post comment");
+        onCancel?.();
       },
     },
   );
@@ -76,9 +83,14 @@ function CreateComment({ type, episodeId, isReply, parentId }: IComment) {
         target: type,
         createdBy: user!.id,
         episodeId: episodeId!,
+        parentId: parentId || null,
       });
     },
   });
+  const handleCancel = () => {
+    form.reset();
+    onCancel?.();
+  }
   const canRender =
     user && (!isReply || parentId) && (type !== "EPISODE" || episodeId);
 
@@ -158,7 +170,7 @@ function CreateComment({ type, episodeId, isReply, parentId }: IComment) {
           </Popover>
         </div>
         <Field orientation="horizontal" className="justify-end pr-7">
-          <Button type="button" variant="outline" onClick={() => form.reset()}>
+          <Button type="button" variant="outline" onClick={handleCancel}>
             Cancel
           </Button>
           <Button type="submit">Comment</Button>

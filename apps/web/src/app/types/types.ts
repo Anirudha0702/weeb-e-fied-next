@@ -27,7 +27,7 @@ export type TWatchListOptions =
   | "planToWatch"
   | "remove";
 
-export const commentResponse = z.object({
+export const comment = z.object({
   id: z.uuid(),
   content: z.string(),
   gif: z.string().nullable(),
@@ -37,6 +37,7 @@ export const commentResponse = z.object({
   userId: z.uuid(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
+  replyCount:z.number(),
 });
 
-export type TComment=z.infer<typeof commentResponse>
+export type TComment=z.infer<typeof comment>

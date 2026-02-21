@@ -1,10 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { House, MoveRight } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/")({
   component: Index,
 });
@@ -93,17 +93,13 @@ function Index() {
                   }}
                   onChange={(e) => setSearchString(e.target.value)}
                 />
-                <Button
-                  className="w-32 rounded-full mt-4 mx-auto flex "
-                  onClick={() =>
-                    navigate({
-                      to: "/home",
-                    })
-                  }
-                >
-                  Be a Weeb
-                  <MoveRight />
-                </Button>
+                <Link to="/home" preload="intent">
+                  <Button className="w-32 rounded-full mt-4 mx-auto flex items-center justify-center">
+                    Be a Weeb
+                    <MoveRight />
+                  </Button>
+                </Link>
+
                 <div className="text-sm mt-6 text-muted-foreground">
                   <span className="font-semibold text-white mr-2">
                     Suggestion:

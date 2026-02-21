@@ -12,5 +12,9 @@ export const getTypeOrmConfig = (
   database: config.getOrThrow('DB_NAME'),
   entities: [path.join(__dirname, '../**/*.entity{.ts,.js}')],
   logging: true,
+  ssl: {
+    ca: config.getOrThrow('DB_CA'),
+    rejectUnauthorized: true,
+  },
   synchronize: true, // Recommended to control sync via env
 });

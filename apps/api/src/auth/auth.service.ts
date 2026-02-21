@@ -26,7 +26,6 @@ export class AuthService {
     try {
       console.log('ee');
       const existing = await this.userService.findOneByEmail(userInfo.email);
-      console.log('ee');
       if (existing)
         throw new ConflictException('This email is already registered');
       const user = await this.userService.create(userInfo);

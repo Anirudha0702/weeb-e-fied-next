@@ -6,8 +6,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
+  OneToMany,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { Like } from '@/like/entities/like.entity';
 
 export enum MediaType {
   IMAGE = 'image',
@@ -38,7 +40,8 @@ export class Post {
 
   @ManyToOne(() => User, (user) => user.posts, { onDelete: 'CASCADE' })
   user: User;
-
+  @OneToMany(() => Like, (like) => like.post)
+  likes: Like[];
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 

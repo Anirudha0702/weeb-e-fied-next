@@ -5,8 +5,8 @@ export const authUser = z.object({
   name: z.string(),
   id: z.string(),
   email: z.string(),
-  profilePicture: z.string().nullable(),
-  coverPicture: z.string().nullable(),
+  profilePicture: z.string(),
+  coverPicture: z.string(),
 });
 
 export const auth = z.object({

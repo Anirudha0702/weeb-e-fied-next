@@ -16,6 +16,10 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import CreateComment from "../common/forms/CreateComment";
 import EpisodeComments from "./EpisodeComments";
+import type { TComment } from "@/app/types/types";
+import { useQueryClient, type InfiniteData } from "@tanstack/react-query";
+import useAuthStore from "@/app/store/authStore";
+import type { TAllCommentsResponse } from "@/app/types/api";
 
 interface IComments {
   animeId: string;
@@ -24,6 +28,8 @@ interface IComments {
 type SortType = "new" | "old";
 function Comments({ animeId, episode }: IComments) {
   const [sortByNew, setSortByNew] = useState(true);
+  const queryClient = useQueryClient();
+  const user = useAuthStore((state) => state.user);
 
   const changeSort = (e: React.MouseEvent<HTMLLIElement>) => {
     const sort = e.currentTarget.dataset.sort as SortType | undefined;
@@ -31,6 +37,36 @@ function Comments({ animeId, episode }: IComments) {
     if (!sort) return;
 
     setSortByNew(sort === "new");
+  };
+  const onCommentSuccess = (comment: TComment) => {
+    queryClient.setQueryData(
+      [`comments-${animeId}_${episode}`],
+      (oldData: InfiniteData<TAllCommentsResponse> | undefined) => {
+        if (!oldData || !user) return oldData;
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page, index: number) => {
+            if (index === 0) {
+              return {
+                ...page,
+                comments: [
+                  {
+                    ...comment,
+                    user: {
+                      id: comment.userId,
+                      name: user.name!,
+                      profilePicture: user.profilePicture,
+                    },
+                  },
+                  ...page.comments,
+                ],
+              };
+            }
+            return page;
+          }),
+        };
+      },
+    );
   };
   return (
     <div>
@@ -96,14 +132,22 @@ function Comments({ animeId, episode }: IComments) {
             </PopoverContent>
           </Popover>
         </div>
-        {/* TODO:::: THIS SECTION WILL BE AVAILABLE WHSEN USER IS LOGGED IN */}
         <div className="mt-2 ">
-          <Card className="w-full p-0.5 px-2 border-none ">
-            <CardContent className="px-0">
-              <CreateComment type="EPISODE" episodeId={`${animeId}_${episode}`}/>
-            </CardContent>
-          </Card>
-          <EpisodeComments sort={sortByNew ? "new" : "old"} episodeId={`${animeId}_${episode}`}/>
+          {user && (
+            <Card className="w-full p-0.5 px-2 border-none ">
+              <CardContent className="px-0">
+                <CreateComment
+                  type="EPISODE"
+                  episodeId={`${animeId}_${episode}`}
+                  onSuccess={onCommentSuccess}
+                />
+              </CardContent>
+            </Card>
+          )}
+          <EpisodeComments
+            sort={sortByNew ? "new" : "old"}
+            episodeId={`${animeId}_${episode}`}
+          />
         </div>
       </div>
     </div>

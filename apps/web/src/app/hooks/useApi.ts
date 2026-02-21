@@ -169,6 +169,7 @@ export const useApiMutation = <TResponse, TPayload = undefined>(
   options?: UseMutationOptions<TResponse, ApiError, TPayload>,
 ) => {
   return useMutation<TResponse, ApiError, TPayload>({
+    mutationKey: config.key,
     mutationFn: (payload: TPayload) =>
       fetchApi<TResponse, TPayload>({ ...config, payload }),
     ...options,
@@ -177,7 +178,8 @@ export const useApiMutation = <TResponse, TPayload = undefined>(
 export const useApiInfinite = <TResponse, TPayload = undefined>(
   config: ApiConfig<TResponse, TPayload>,
 ) => {
-  const queryKey = config.key ? [config.key] : [config.endpoint, config.method];
+  const queryKey = config.key 
+  const enabled = config.enable ?? true;
 
   return useInfiniteQuery<
     TResponse,
@@ -190,7 +192,9 @@ export const useApiInfinite = <TResponse, TPayload = undefined>(
     initialPageParam: undefined,
     queryFn: ({ pageParam }) =>
       fetchApiInfinite<TResponse, TPayload>(config, pageParam),
+    enabled,
     getNextPageParam: (lastPage) =>
       lastPage.nextCursor ?? undefined,
   });
 };
+
