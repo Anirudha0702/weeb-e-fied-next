@@ -9,7 +9,15 @@ import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './../../decorators/public/public.decorator';
 import { type Request } from 'express';
 import { JwtService } from '../../../auth/jwt/jwt.service';
+export interface JwtUserPayload {
+  id: string;
+  email: string;
+  name: string;
+  privacy: string;
+}
 
+// Extend Express Request to include optional user
+export type AuthRequest = Request & { user?: JwtUserPayload };
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
@@ -28,7 +36,7 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    const req = context.switchToHttp().getRequest<Request>();
+    const req = context.switchToHttp().getRequest<AuthRequest>();
 
     const authHeader = req.headers.authorization;
     if (!authHeader?.startsWith('Bearer ')) {
