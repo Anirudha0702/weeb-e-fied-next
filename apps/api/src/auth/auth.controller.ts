@@ -5,13 +5,13 @@ import {
   ValidationPipe,
   Res,
   Get,
-  UseGuards,
+  // UseGuards,
   Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SigninDTO, SignupDTO } from './dto/auth.dto';
 import { type Request, type Response } from 'express';
-import { AuthGuard } from '@nestjs/passport';
+// import { AuthGuard } from '@nestjs/passport';
 import { Public } from '../common/decorators/public/public.decorator';
 @Public()
 @Controller('auth') // Base route: /auth
@@ -40,26 +40,26 @@ export class AuthController {
       | undefined;
     return this.authService.verify(refreshToken);
   }
-  @Get('google')
-  @UseGuards(AuthGuard('google'))
-  async googleAuth() {
-    // Redirects to Google OAuth login
-  }
-  @Get('google/callback')
-  @UseGuards(AuthGuard('google'))
-  googleAuthRedirect(@Req() req: Request) {
-    return req.user; // User info from Google
-  }
+  // @Get('google')
+  // @UseGuards(AuthGuard('google'))
+  // async googleAuth() {
+  //   // Redirects to Google OAuth login
+  // }
+  // @Get('google/callback')
+  // @UseGuards(AuthGuard('google'))
+  // googleAuthRedirect(@Req() req: Request) {
+  //   return req.user; // User info from Google
+  // }
 
-  @Get('facebook')
-  @UseGuards(AuthGuard('facebook'))
-  async facebookAuth() {}
+  // @Get('facebook')
+  // @UseGuards(AuthGuard('facebook'))
+  // async facebookAuth() {}
 
-  @Get('facebook/callback')
-  @UseGuards(AuthGuard('facebook'))
-  facebookAuthRedirect(@Req() req: Request) {
-    return req.user;
-  }
+  // @Get('facebook/callback')
+  // @UseGuards(AuthGuard('facebook'))
+  // facebookAuthRedirect(@Req() req: Request) {
+  //   return req.user;
+  // }
   @Get('get-token')
   GenerateAccessToken(@Req() req: Request) {
     return this.authService.GenerateAccessToken(req);

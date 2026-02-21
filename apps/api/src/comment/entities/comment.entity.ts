@@ -22,10 +22,10 @@ import { Like } from '../../like/entities/like.entity';
 )
 export class Comment {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ type: 'text' })
-  content: string;
+  content!: string;
 
   @Column({ type: 'text', default: null })
   gif: string | null;

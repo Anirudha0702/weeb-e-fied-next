@@ -14,7 +14,7 @@ import {
 import { UserService } from '../users/users.service';
 import { matchHash } from '../utils/security';
 import { JwtService } from './jwt/jwt.service';
-import { type Response, type Request } from 'express';
+import { Response, Request } from 'express';
 @Injectable()
 export class AuthService {
   constructor(
