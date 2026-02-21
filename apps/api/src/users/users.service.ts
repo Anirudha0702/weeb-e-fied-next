@@ -27,7 +27,7 @@ export class UserService {
     private readonly uploadService: UploadService,
   ) {}
   async create(createUserDto: CreateUserDto) {
-    const { name, email, password, verified = false } = createUserDto;
+    const { name, email, password, verified = false, username } = createUserDto;
 
     // hash password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -35,6 +35,7 @@ export class UserService {
     const user = this.userRepository.create({
       name,
       email,
+      username,
       password: hashedPassword,
       isVerified: verified,
     });

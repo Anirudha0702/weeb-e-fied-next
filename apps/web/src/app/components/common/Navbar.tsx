@@ -37,6 +37,7 @@ function Navbar() {
     endpoint: "/auth/logout",
     method: "POST",
     responseSchema: logoutResponseSchema,
+    key: ["logout"],
   },{
     onSuccess:()=>{
       clearAuth()

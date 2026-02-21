@@ -1,16 +1,19 @@
+import useAuthStore from "../store/authStore";
 import type { ApiConfig, ApiError } from "../types/api";
 import {
   useQuery,
   useMutation,
   type UseQueryOptions,
   type UseMutationOptions,
+  useInfiniteQuery,
+  type InfiniteData,
 } from "@tanstack/react-query";
 
 const API_BASE_URL = import.meta.env.VITE_APP_BACKEND?.replace(/\/$/, "");
 
 const buildUrl = (
   endpoint: string,
-  queryParams?: Record<string, string | number | boolean>
+  queryParams?: Record<string, string | number | boolean>,
 ) => {
   if (!queryParams) return endpoint;
   const params = new URLSearchParams();
@@ -23,7 +26,7 @@ const buildUrl = (
 };
 
 export const fetchApi = async <TResponse, TPayload = undefined>(
-  config: ApiConfig<TResponse, TPayload>
+  config: ApiConfig<TResponse, TPayload>,
 ): Promise<TResponse> => {
   const {
     endpoint,
@@ -41,38 +44,56 @@ export const fetchApi = async <TResponse, TPayload = undefined>(
   }
   if (!API_BASE_URL) {
     throw new Error(
-      "API_BASE_URL is not defined. Check your .env and Vite config."
+      "API_BASE_URL is not defined. Check your .env and Vite config.",
     );
   }
   const normalizedEndpoint = endpoint.startsWith("/")
     ? endpoint
     : `/${endpoint}`;
   const url = buildUrl(`${API_BASE_URL}${normalizedEndpoint}`, queryParams);
-
-  // const defaultHeaders = {
-  //   "Content-Type": "application/json",
-  //   ...headers,
-  // };
-
-  // const response = await fetch(url, {
-  //   method,
-  //   headers: defaultHeaders,
-  //   body: payload ? JSON.stringify(payload) : undefined,
-  //   credentials: "include",
-  // });
-  const isFormData = payload instanceof FormData;
-
-  const finalHeaders = {
-    ...(isFormData ? {} : { "Content-Type": "application/json" }),
-    ...headers,
+  const makeRequest = async (): Promise<Response> => {
+    const isFormData = payload instanceof FormData;
+    const token = useAuthStore.getState().token;
+    const finalHeaders = {
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
+      ...headers,
+      ...(token ? { authorization: `Bearer ${token}` } : {}),
+    };
+    return fetch(url, {
+      method,
+      headers: finalHeaders,
+      body: isFormData
+        ? payload
+        : payload
+          ? JSON.stringify(payload)
+          : undefined,
+      credentials: "include",
+    });
   };
+  let response = await makeRequest();
+  if (response.status === 401 && normalizedEndpoint !== "/auth/login") {
+    try {
+      const refreshRes = await fetch(`/api/auth/get-token`, {
+        method: "GET",
+        credentials: "include",
+      });
 
-  const response = await fetch(url, {
-    method,
-    headers: finalHeaders,
-    body: isFormData ? payload : payload ? JSON.stringify(payload) : undefined,
-    credentials: "include",
-  });
+      if (refreshRes.ok) {
+        const data = await refreshRes.json();
+        if (data?.token) useAuthStore.getState().setToken(data.token);
+
+        response = await makeRequest();
+      } else {
+        throw new Error("Token refresh failed");
+      }
+    } catch (e) {
+      console.error("Token refresh error:", e);
+      throw {
+        message: "Session expired. Please log in again.",
+        status: 401,
+      } as ApiError;
+    }
+  }
   if (!response.ok) {
     const fallbackMessages: Record<number, string> = {
       400: "Invalid request. Please check your input.",
@@ -110,11 +131,24 @@ export const fetchApi = async <TResponse, TPayload = undefined>(
   }
   return data;
 };
+export const fetchApiInfinite = async <TResponse, TPayload = undefined>(
+  config: ApiConfig<TResponse, TPayload>,
+  pageParam?: string | number,
+): Promise<TResponse> => {
+  const mergedQueryParams = {
+    ...config.queryParams,
+    ...(pageParam !== undefined ? { cursor: pageParam } : {}),
+  };
 
+  return fetchApi<TResponse, TPayload>({
+    ...config,
+    queryParams: mergedQueryParams,
+  });
+};
 // For GET / Query-based APIs
 export const useApi = <TResponse, TPayload = undefined>(
   config: ApiConfig<TResponse, TPayload>,
-  options?: Omit<UseQueryOptions<TResponse, ApiError>, "queryKey" | "queryFn">
+  options?: Omit<UseQueryOptions<TResponse, ApiError>, "queryKey" | "queryFn">,
 ) => {
   const queryKey = [
     config.endpoint,
@@ -132,11 +166,35 @@ export const useApi = <TResponse, TPayload = undefined>(
 
 export const useApiMutation = <TResponse, TPayload = undefined>(
   config: Omit<ApiConfig<TResponse, TPayload>, "payload">,
-  options?: UseMutationOptions<TResponse, ApiError, TPayload>
+  options?: UseMutationOptions<TResponse, ApiError, TPayload>,
 ) => {
   return useMutation<TResponse, ApiError, TPayload>({
+    mutationKey: config.key,
     mutationFn: (payload: TPayload) =>
       fetchApi<TResponse, TPayload>({ ...config, payload }),
     ...options,
   });
 };
+export const useApiInfinite = <TResponse, TPayload = undefined>(
+  config: ApiConfig<TResponse, TPayload>,
+) => {
+  const queryKey = config.key 
+  const enabled = config.enable ?? true;
+
+  return useInfiniteQuery<
+    TResponse,
+    ApiError,
+    InfiniteData<TResponse>,
+    (string | undefined)[],
+    string | undefined
+  >({
+    queryKey,
+    initialPageParam: undefined,
+    queryFn: ({ pageParam }) =>
+      fetchApiInfinite<TResponse, TPayload>(config, pageParam),
+    enabled,
+    getNextPageParam: (lastPage) =>
+      lastPage.nextCursor ?? undefined,
+  });
+};
+

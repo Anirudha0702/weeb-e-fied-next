@@ -14,7 +14,8 @@ export class SignupDTO {
 
   @IsNotEmpty({ message: 'Name is required' })
   name: string;
-
+  @IsNotEmpty({ message: 'Username is required' })
+  username: string;
   @IsNotEmpty({ message: 'Password is required' })
   @MinLength(6, { message: 'Password must be at least 6 characters long' })
   password: string;
@@ -47,6 +48,7 @@ export class InternalUser {
   lastLogin?: Date;
   privacy: 'Public' | 'Private' | 'Friends';
   gender: Gender;
+  username: string;
 
   constructor(user: User) {
     this.id = user.id;
@@ -62,6 +64,7 @@ export class InternalUser {
     this.lastLogin = user.lastLogin;
     this.coverPicture = user.coverPicture;
     this.gender = user.gender;
+    this.username = user.username;
   }
 }
 

@@ -159,7 +159,7 @@ function SearchFilter({ onFilter }: ISearchFilter) {
         {searchOptions.map((option) => {
           const fields = getOption(option);
           return (
-            <Field className="w-full max-w-48">
+            <Field className="w-full max-w-48" key={option}>
               <FieldLabel>{option}</FieldLabel>
               <Select
                 defaultValue="any"

@@ -5,6 +5,7 @@ import "./index.css";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 import QueryClientProvider from "./providers/QueryClientProvider";
+import { HelmetProvider } from "react-helmet-async";
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -22,9 +23,10 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
+      <HelmetProvider>
       <QueryClientProvider>
       <RouterProvider router={router} />
-      </QueryClientProvider>
+      </QueryClientProvider></HelmetProvider>
     </StrictMode>
   );
 }
