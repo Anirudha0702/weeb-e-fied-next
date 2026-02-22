@@ -28,7 +28,6 @@ import { AuthController } from './auth/auth.controller';
   imports: [
     LoggerModule,
     ConfigModule.forRoot({
-      envFilePath: '.env',
       isGlobal: true,
       load: [dbConfig],
     }),
