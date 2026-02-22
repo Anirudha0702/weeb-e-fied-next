@@ -41,7 +41,6 @@ export class UploadService {
         },
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
       Readable.from(file.buffer).pipe(uploadStream);
     });
   }
