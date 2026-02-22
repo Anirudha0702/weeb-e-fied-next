@@ -30,7 +30,6 @@ import { AuthController } from './auth/auth.controller';
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule], // optional, since ConfigModule is global
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         return getTypeOrmConfig(configService);
