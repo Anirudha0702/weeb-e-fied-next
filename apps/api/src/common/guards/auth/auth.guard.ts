@@ -7,13 +7,13 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from './../../decorators/public/public.decorator';
-import { type Request } from 'express';
+import { Request } from 'express';
 import { JwtService } from '../../../auth/jwt/jwt.service';
 export interface JwtUserPayload {
   id: string;
   email: string;
   name: string;
-  privacy: string;
+  profilePicture: string;
 }
 
 // Extend Express Request to include optional user
@@ -49,7 +49,7 @@ export class AuthGuard implements CanActivate {
       id: string;
       email: string;
       name: string;
-      privacy: string;
+      profilePicture: string;
     }>(token);
     if (!payload) {
       throw new UnauthorizedException('Invalid token');
