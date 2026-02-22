@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import dbConfig from './config/db.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getTypeOrmConfig } from './config/orm.config';
 import { UsersModule } from './users/users.module';
@@ -29,7 +28,6 @@ import { AuthController } from './auth/auth.controller';
     LoggerModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [dbConfig],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule], // optional, since ConfigModule is global
