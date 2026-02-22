@@ -12,11 +12,11 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
-    "build:api": "turbo run build --filter=weeb-e-fied-api",
+    "build:api": "turbo run build --filter=api",
     "lint": "turbo run lint",
     "dev:web": "turbo run dev --filter=weeb-e-fied-web",
-    "dev:api": "turbo run dev --filter=weeb-e-fied-api",
-    "start:api": "turbo run start --filter=weeb-e-fied-api",
+    "dev:api": "turbo run dev --filter=api",
+    "start:api": "turbo run start --filter=api",
     "docker:db": "docker compose -f docker/docker-compose.dev.yml up -d"
   },
   "keywords": [],
