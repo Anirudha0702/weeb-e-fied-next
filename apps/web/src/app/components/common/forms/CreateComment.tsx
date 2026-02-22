@@ -157,36 +157,36 @@ function CreateComment({
               }}
             />
           </FieldGroup>
-          <Popover onOpenChange={setIsOpen} open={isOpen}>
-            <PopoverTrigger asChild>
-              <Smile className="h-5 w-5 cursor-pointer" />
-            </PopoverTrigger>
-            <PopoverContent className="w-fit p-0">
-              <EmojiPicker
-                className="h-85.5 z-9999"
-                onEmojiSelect={({ emoji }) => {
-                  form.setFieldValue(
-                    "comment",
-                    form.getFieldValue("comment") + emoji,
-                  );
-                }}
-              >
-                <EmojiPickerSearch />
-                <EmojiPickerContent />
-                <EmojiPickerFooter />
-              </EmojiPicker>
-            </PopoverContent>
-          </Popover>
-          <div className="">
+          <div className="flex flex-col gap-2">
+            <Popover onOpenChange={setIsOpen} open={isOpen}>
+              <PopoverTrigger asChild>
+                <Smile className="h-5 w-5 cursor-pointer" />
+              </PopoverTrigger>
+              <PopoverContent className="w-fit p-0">
+                <EmojiPicker
+                  className="h-85.5 z-9999"
+                  onEmojiSelect={({ emoji }) => {
+                    form.setFieldValue(
+                      "comment",
+                      form.getFieldValue("comment") + emoji,
+                    );
+                  }}
+                >
+                  <EmojiPickerSearch />
+                  <EmojiPickerContent />
+                  <EmojiPickerFooter />
+                </EmojiPicker>
+              </PopoverContent>
+            </Popover>
             <Popover onOpenChange={setOpenGif} open={openGif}>
               <PopoverTrigger asChild>
                 <svg
-                  width={20}
-                  height={20}
+                  width={18}
+                  height={18}
                   viewBox="0 0 24 24"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className="cursor-pointer"
+                  className="cursor-pointer ml-0.5"
                 >
                   <rect
                     width="24"
@@ -209,19 +209,6 @@ function CreateComment({
                 </svg>
               </PopoverTrigger>
               <PopoverContent className="w-fit p-0">
-                {/* <EmojiPicker
-                  className="h-85.5 z-9999"
-                  onEmojiSelect={({ emoji }) => {
-                    form.setFieldValue(
-                      "comment",
-                      form.getFieldValue("comment") + emoji,
-                    );
-                  }}
-                >
-                  <EmojiPickerSearch />
-                  <EmojiPickerContent />
-                  <EmojiPickerFooter />
-                </EmojiPicker> */}
                 <GiF onSelect={(gif) => console.log(gif)} />
               </PopoverContent>
             </Popover>

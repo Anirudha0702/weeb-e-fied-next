@@ -79,7 +79,7 @@ function Comments({ animeId, episode }: IComments) {
           </span>
         </Button>
       </div>
-
+      
       <div className="bg-muted/20 p-4 my-4 rounded-md text-base">
         <div className="flex justify-between ">
           <div className="flex">
