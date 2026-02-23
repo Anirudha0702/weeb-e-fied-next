@@ -28,6 +28,7 @@ import { AuthController } from './auth/auth.controller';
     LoggerModule,
     ConfigModule.forRoot({
       isGlobal: true,
+      ignoreEnvFile: process.env.NODE_ENV === 'production',
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],

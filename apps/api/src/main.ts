@@ -4,9 +4,11 @@ import cookieParser from 'cookie-parser';
 import { AppLogger } from './common/logger/app.logger';
 import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
+  console.log('DB_HOST raw:', process.env.DB_HOST);
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
   });
+
   const logger = app.get(AppLogger);
   app.useLogger(logger);
   app.use(cookieParser());
