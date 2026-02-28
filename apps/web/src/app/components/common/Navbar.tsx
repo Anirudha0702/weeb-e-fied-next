@@ -1,5 +1,12 @@
 import { useNavigate } from "@tanstack/react-router";
-import { CircleUserRound, Frown, LoaderCircle, LogOut, Menu, Settings } from "lucide-react";
+import {
+  CircleUserRound,
+  Frown,
+  LoaderCircle,
+  LogOut,
+  Menu,
+  Settings,
+} from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -33,28 +40,31 @@ function Navbar() {
   const navigate = useNavigate();
   const { user, clearAuth } = useAuthStore();
   const [openLogoutPopup, setOpenLogoutPopup] = useState(false);
-  const mutation = useApiMutation<LogoutResponse>({
-    endpoint: "/auth/logout",
-    method: "POST",
-    responseSchema: logoutResponseSchema,
-    key: ["logout"],
-  },{
-    onSuccess:()=>{
-      clearAuth()
-      setOpenLogoutPopup(false)
+  const mutation = useApiMutation<LogoutResponse>(
+    {
+      endpoint: "/auth/logout",
+      method: "POST",
+      responseSchema: logoutResponseSchema,
+      key: ["logout"],
     },
-    onError:()=>{
-      setOpenLogoutPopup(false)
-    }
-  });
+    {
+      onSuccess: () => {
+        clearAuth();
+        setOpenLogoutPopup(false);
+      },
+      onError: () => {
+        setOpenLogoutPopup(false);
+      },
+    },
+  );
   const logout = () => {
     setOpenLogoutPopup(true);
   };
-  const confirmLogout=(e:React.MouseEvent<HTMLButtonElement>)=>{
-     const val=e.currentTarget.dataset.confirm
-     if(val==='yes')mutation.mutate(undefined)
-      else setOpenLogoutPopup(false)
-  }
+  const confirmLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const val = e.currentTarget.dataset.confirm;
+    if (val === "yes") mutation.mutate(undefined);
+    else setOpenLogoutPopup(false);
+  };
 
   return (
     <div className="h-16 bg-muted flex items-center px-4 shadow-sm fixed top-0 w-full z-50">
@@ -101,7 +111,14 @@ function Navbar() {
                 {user.email}
               </p>
               <ol className="my-2 space-y-2">
-                <li className="flex items-center bg-muted p-2 rounded-sm py-1 cursor-pointer hover:text-chart-4">
+                <li
+                  className="flex items-center bg-muted p-2 rounded-sm py-1 cursor-pointer hover:text-chart-4"
+                  onClick={() =>
+                    navigate({
+                      to: `/profile`,
+                    })
+                  }
+                >
                   <CircleUserRound className="mr-2" size={16} />
                   Profile
                 </li>
@@ -125,26 +142,37 @@ function Navbar() {
       <Dialog open={openLogoutPopup}>
         <DialogContent className="sm:max-w-sm" showCloseButton={false}>
           <DialogHeader>
-            <DialogTitle className="flex gap-2 items-center">Logout <Frown /></DialogTitle>
+            <DialogTitle className="flex gap-2 items-center">
+              Logout <Frown />
+            </DialogTitle>
             <DialogDescription>
               Are you sure, you want to logout?
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-              {
-                mutation.isPending?(<Button className="cursor-pointer" >
-              <LoaderCircle className="animate-spin"/>
-            </Button>):(<><Button
-                variant="outline"
-                className="cursor-pointer"
-                data-confirm="no" onClick={confirmLogout}
-              >
-                No
+            {mutation.isPending ? (
+              <Button className="cursor-pointer">
+                <LoaderCircle className="animate-spin" />
               </Button>
-            <Button className="cursor-pointer" data-confirm="yes" onClick={confirmLogout}>
-              Yes
-            </Button></>)
-              }
+            ) : (
+              <>
+                <Button
+                  variant="outline"
+                  className="cursor-pointer"
+                  data-confirm="no"
+                  onClick={confirmLogout}
+                >
+                  No
+                </Button>
+                <Button
+                  className="cursor-pointer"
+                  data-confirm="yes"
+                  onClick={confirmLogout}
+                >
+                  Yes
+                </Button>
+              </>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>

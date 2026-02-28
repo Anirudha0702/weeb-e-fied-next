@@ -50,14 +50,12 @@ export class UserService {
     try {
       const ofUserInfo = await this.userRepository.findOne({
         where: [{ id: ofUser }],
-        relations: { posts: true },
       });
       if (!ofUserInfo) throw new NotFoundException('User not found');
-      const totalPosts = ofUserInfo.posts.length;
 
       const user = new InternalUser(ofUserInfo);
 
-      return { user, totalPosts };
+      return { user };
     } catch (error) {
       throw new InternalServerErrorException(
         error instanceof Error ? error.message : 'An unexpected error occurred',

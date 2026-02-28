@@ -46,7 +46,7 @@ export class User {
   @Column({
     nullable: true,
     default:
-      'https://res.cloudinary.com/dnmshy1ag/image/upload/v1763277858/flat-design-male-female-symbols_23-2149288474_yhj2i1.webp',
+      'https://res.cloudinary.com/dmz0cwtzd/image/upload/v1772130018/cloud_share/user-avatar_f9dzet.png',
   })
   profilePicture: string;
 
