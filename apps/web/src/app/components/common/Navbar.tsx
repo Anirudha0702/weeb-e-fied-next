@@ -35,6 +35,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { PopoverClose } from "@radix-ui/react-popover";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -111,21 +112,25 @@ function Navbar() {
                 {user.email}
               </p>
               <ol className="my-2 space-y-2">
-                <li
-                  className="flex items-center bg-muted p-2 rounded-sm py-1 cursor-pointer hover:text-chart-4"
-                  onClick={() =>
-                    navigate({
-                      to: `/profile`,
-                    })
-                  }
-                >
-                  <CircleUserRound className="mr-2" size={16} />
-                  Profile
-                </li>
-                <li className="flex items-center bg-muted p-2 rounded-sm py-1 cursor-pointer hover:text-chart-4">
-                  <Settings className="mr-2" size={16} />
-                  Settings
-                </li>
+                <PopoverClose className="block w-full">
+                  <li
+                    className="flex items-center bg-muted p-2 rounded-sm py-1 cursor-pointer hover:text-chart-4"
+                    onClick={() =>
+                      navigate({
+                        to: `/profile`,
+                      })
+                    }
+                  >
+                    <CircleUserRound className="mr-2" size={16} />
+                    Profile
+                  </li>
+                </PopoverClose>
+                <PopoverClose className="block w-full">
+                  <li className="flex items-center bg-muted p-2 rounded-sm py-1 cursor-pointer hover:text-chart-4">
+                    <Settings className="mr-2" size={16} />
+                    Settings
+                  </li>
+                </PopoverClose>
               </ol>
               <p className="flex justify-end hover:text-chart-4 cursor-pointer">
                 <p className=" items-center flex" onClick={logout}>
