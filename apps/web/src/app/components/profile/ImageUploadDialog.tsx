@@ -1,31 +1,37 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { UploadCloud } from "lucide-react";
+import { LoaderCircle, UploadCloud } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 interface ImageUploadDialogProps {
   open: boolean;
   type: "Cover" | "Profile";
+  loading: boolean;
   onCancel: () => void;
-  onSuccess: (fileStr: string) => void;
+  onSuccess: (file: File) => void;
 }
 function ImageUploadDialog({
   open,
   type,
+  loading,
   onCancel,
   onSuccess,
 }: ImageUploadDialogProps) {
+  const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setFile(file);
     const imageUrl = URL.createObjectURL(file);
-  setPreview(imageUrl);
+    setPreview(imageUrl);
   };
   const handleSave = () => {
-    if (!preview) return;
-    onSuccess(preview);
+    if (!preview || !file) return;
+    onSuccess(file);
+    setFile(null)
+    setPreview(null)
   };
   return (
     <Dialog open={open}>
@@ -79,10 +85,11 @@ function ImageUploadDialog({
               </div>
 
               <div className="flex justify-end gap-3">
-                <Button variant="outline" onClick={onCancel}>
+                <Button variant="outline" onClick={onCancel} disabled={loading}>
                   Cancel
                 </Button>
-                <Button disabled={!preview} onClick={handleSave}>
+                <Button disabled={!preview || loading} onClick={handleSave}>
+                  {loading && <LoaderCircle className="animate-spin" />}
                   Save
                 </Button>
               </div>

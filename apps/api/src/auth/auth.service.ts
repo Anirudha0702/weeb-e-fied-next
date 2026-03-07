@@ -51,6 +51,7 @@ export class AuthService {
         email: existing.email,
         name: existing.name,
         id: existing.id,
+        username: existing.username,
       };
       const accessToken = this.jwt.createToken(payload, 'access', 60 * 5);
       const refreshToken = this.jwt.createToken(
@@ -87,14 +88,14 @@ export class AuthService {
       const refreshToken = cookies?.utopia_refreshToken;
       if (!refreshToken)
         throw new UnauthorizedException('Invalid token format');
-      const { id, email, name, privacy } = this.jwt.verifyToken<{
+      const { id, email, name, username } = this.jwt.verifyToken<{
         id: string;
         email: string;
         name: string;
-        privacy: string;
+        username: string;
       }>(refreshToken);
       const accessToken = this.jwt.createToken(
-        { id, email, name, privacy },
+        { id, email, name, username },
         'access',
         60 * 5,
       );
@@ -120,26 +121,30 @@ export class AuthService {
         token = refreshToken;
       }
       if (!token) throw new UnauthorizedException('Invalid token format');
-      const { id, email, name, privacy } = this.jwt.verifyToken<{
+      const { id, email, name, username } = this.jwt.verifyToken<{
         id: string;
         email: string;
         name: string;
-        privacy: string;
+        username: string;
       }>(token);
       const user = await this.userService.findOneById(id);
       if (!user) throw new UnauthorizedException('User not found');
       const accessToken = this.jwt.createToken(
-        { id, email, name, privacy },
+        { id, email, name, username },
         'access',
         60 * 5,
       );
+
       return {
         token: accessToken,
         user: {
           id,
           email,
           name,
-          privacy,
+          username,
+          dob: user.dateOfBirth,
+          gender: user.gender,
+          bio: user.bio,
           profilePicture: user?.profilePicture,
           coverPicture: user?.coverPicture,
         },

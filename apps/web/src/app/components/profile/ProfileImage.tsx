@@ -1,15 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { PenLine } from "lucide-react";
 import ImageUploadDialog from "./ImageUploadDialog";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ProfileContext } from "@/app/context/ProfileContext";
 
 interface ProfileImageProps {
   src: string;
-  onEdit: (newSrc: string) => void;
 }
-function ProfileImage({ src, onEdit }: ProfileImageProps) {
+function ProfileImage({ src }: ProfileImageProps) {
+  const context = useContext(ProfileContext);
   const [openImageChangeDialog, setOpenImageChangeDialog] = useState(false);
-  const handleEdit = (fileURL: string) => onEdit(fileURL);
+  if (!context || !context?.profile) return null;
+  const handleEdit = async (file: File) => {
+    try {
+      await context.updateProfile({ profilePicture: file });
+      setOpenImageChangeDialog(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="w-52 shrink-0 order-1 sm:order-2 mx-auto sm:mx-0 p-4">
       <div className="relative w-24 h-24 rounded-full overflow-hidden bg-muted/60 border cursor-pointer mx-auto">
@@ -22,14 +31,15 @@ function ProfileImage({ src, onEdit }: ProfileImageProps) {
       <div className="flex justify-center mt-2">
         <Button
           className="h-7 flex items-center gap-2 cursor-pointer"
-          data-editType="Profile"
+          data-edittype="Profile"
           onClick={() => setOpenImageChangeDialog(true)}
         >
           Edit <PenLine />
         </Button>
       </div>
-       <ImageUploadDialog
+      <ImageUploadDialog
         open={openImageChangeDialog}
+        loading={context.loading}
         type="Profile"
         onCancel={() => setOpenImageChangeDialog(false)}
         onSuccess={handleEdit}

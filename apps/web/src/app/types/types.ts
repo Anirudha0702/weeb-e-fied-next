@@ -86,14 +86,14 @@ export type UpdateUser = z.infer<typeof UpdateUserFormSchema>;
 
 export const updateUserInfoSchema = z
   .object({
-    email: z.string(),
+    email: z.email(),
     userName: z.string(),
-    name: z.string().length(5),
-    dob: z.string().or(z.undefined()),
-    gender: z.enum(["Male", "Female", "Others"]).nullable(),
-    bio: z.string().nullable(),
-    password: z.string().min(1).max(3),
-    currentpassword: z.string().min(1).max(3),
+    name: z.string(),
+    dob: z.string().optional(),
+    gender: z.enum(["Male", "Female", "Others"]).optional(),
+    bio: z.string().optional(),
+    password: z.string().optional(),
+    currentpassword: z.string().optional(),
   })
   .refine(
     (data) =>

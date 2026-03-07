@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/avatar";
 import { useApiMutation } from "@/app/hooks/useApi";
 import { logoutResponseSchema, type LogoutResponse } from "@/app/types/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DialogContent,
   Dialog,
@@ -39,7 +39,7 @@ import { PopoverClose } from "@radix-ui/react-popover";
 
 function Navbar() {
   const navigate = useNavigate();
-  const { user, clearAuth } = useAuthStore();
+  const { user, clearAuth,setAuth } = useAuthStore();
   const [openLogoutPopup, setOpenLogoutPopup] = useState(false);
   const mutation = useApiMutation<LogoutResponse>(
     {
@@ -66,7 +66,18 @@ function Navbar() {
     if (val === "yes") mutation.mutate(undefined);
     else setOpenLogoutPopup(false);
   };
-
+useEffect(() => {
+    (async () => {
+      const refreshRes = await fetch(`/api/auth/me`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (refreshRes.ok) {
+        const data  = await refreshRes.json();
+        setAuth(data);
+      }
+    })();
+  }, [setAuth]);
   return (
     <div className="h-16 bg-muted flex items-center px-4 shadow-sm fixed top-0 w-full z-50">
       <Drawer direction="left">

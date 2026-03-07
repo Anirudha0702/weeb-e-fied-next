@@ -99,11 +99,15 @@ function SignUp() {
         setAuth({
           token: accessToken,
           user: {
-            name: user.name,
             id: user.id,
+            name: user.name,
+            username:user.username,
             email: user.email,
-            profilePicture: user.profilePicture ?? null,
-            coverPicture: user.coverPicture ?? null,
+            dob: user.dateOfBirth?.toISOString(),
+            bio: user.bio,
+            gender: user.gender,
+            profilePicture: user.profilePicture,
+            coverPicture: user.coverPicture,
           },
         });
         toast.success("Login successful!");

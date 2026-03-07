@@ -1,3 +1,4 @@
+import { ProfileContext } from "@/app/context/ProfileContext";
 import { updateUserInfoSchema, type UpdateUserForm } from "@/app/types/types";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -12,34 +13,41 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useForm } from "@tanstack/react-form";
 import { CalendarIcon, Eye, EyeClosed, Loader } from "lucide-react";
-import { useState } from "react";
-import * as z from "zod";
+import { useContext, useState } from "react";
 interface UserInfoProps {
   email: string;
   username: string;
-  name: string;
-  bio?: string;
-  dob?: string;
-  gender?: "Male" | "Female" | "Others";
-  disabled: boolean;
-  onSaveChange: (val: UpdateUserForm) => void;
 }
 
-function UserInfo({
-  email,
-  username,
-  name,
-  bio,
-  dob,
-  gender,
-  disabled,
-  onSaveChange,
-}: UserInfoProps) {
+function UserInfo({ email, username }: UserInfoProps) {
   const [wannaChangePassword, setWannaChangePassword] = useState(false);
+  const context = useContext(ProfileContext);
   const [show, setShow] = useState({
     password: false,
     currentPassword: false,
   });
+
+  const form = useForm({
+    defaultValues: {
+      email: email,
+      userName: username,
+      name: context?.profile?.name || "",
+      dob: context?.profile?.dob ?? undefined,
+      gender: context?.profile?.gender,
+      bio: context?.profile?.bio,
+      password: undefined,
+      currentpassword: undefined,
+    } as UpdateUserForm & { email: string; userName: string },
+    validators: {
+      onChange: updateUserInfoSchema,
+    },
+    onSubmit: ({ value }) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { email, userName, ...rest } = value;
+      context?.updateProfile(rest);
+    },
+  });
+
   const changeVisiblity = (e: React.MouseEvent<SVGSVGElement>) => {
     const visibility = e.currentTarget.dataset.visiblity as
       | "show"
@@ -56,31 +64,10 @@ function UserInfo({
       [key]: visibility === "show",
     }));
   };
+
   const handlePasswordChangeClick = () =>
     setWannaChangePassword(!wannaChangePassword);
-  const form = useForm({
-    defaultValues: {
-      email: email,
-      userName: username,
-      name: name || "",
-      dob: dob,
-      gender: gender,
-      bio: bio,
-      password: "",
-      currentpassword: "",
-    },
-    validators: {
-      onChange: ({ value }) => {
-        const result = updateUserInfoSchema.safeParse(value);
-
-        if (!result.success) {
-          return z.treeifyError(result.error);
-        }
-      },
-    },
-    onSubmit: ({ value }) => onSaveChange(value),
-  });
-
+  if (!context || !context?.profile) return null;
   return (
     <div className="order-2 sm:order-1 w-full sm:bg-background/60 p-4">
       <form
@@ -99,9 +86,9 @@ function UserInfo({
               </FieldLabel>
               <Input
                 id="email"
-                className="border p-2 w-full"
+                className="border p-2 w-full "
                 placeholder="Email"
-                value={field.state.value}
+                defaultValue={field.state.value}
                 disabled
               />
             </div>
@@ -111,14 +98,14 @@ function UserInfo({
           name="userName"
           children={(field) => (
             <div className="mb-2">
-              <FieldLabel htmlFor="email" className="mb-2">
+              <FieldLabel htmlFor="username" className="mb-2">
                 Username
               </FieldLabel>
               <Input
-                id="email"
+                id="username"
                 className="border p-2 w-full"
                 placeholder="Email"
-                value={field.state.value}
+                defaultValue={field.state.value}
                 disabled
               />
               {!field.state.meta.isValid && (
@@ -133,21 +120,27 @@ function UserInfo({
           name="name"
           children={(field) => (
             <div className="mb-2">
-              <FieldLabel htmlFor="email" className="mb-2">
+              <FieldLabel htmlFor="name" className="mb-2">
                 Name
               </FieldLabel>
               <Input
+                id="name"
                 className="border p-2 w-full"
                 placeholder="Name"
                 value={field.state.value}
-                disabled={disabled}
+                disabled={context?.loading}
                 onChange={(e) => field.handleChange(e.target.value)}
               />
 
-              {!field.state.meta.isValid && (
-                <p className="text-red-500 text-sm">
-                  {field.state.meta.errors.join(",")}
-                </p>
+              {field.state.meta.errors.length > 0 && (
+                <>
+                  
+                  <p className="text-red-500 text-sm">
+                    {field.state.meta.errors
+                      .map((err) => err?.message)
+                      .join(", ")}
+                  </p>
+                </>
               )}
             </div>
           )}
@@ -156,13 +149,14 @@ function UserInfo({
           name="bio"
           children={(field) => (
             <div className="mb-2">
-              <FieldLabel htmlFor="email" className="mb-2">
+              <FieldLabel htmlFor="bio" className="mb-2">
                 Bio
               </FieldLabel>
 
               <Textarea
+                id="bio"
                 rows={3}
-                disabled={disabled}
+                disabled={context?.loading}
                 placeholder="About yourself..."
                 value={field.state.value ?? ""}
                 onChange={(e) => field.handleChange(e.target.value)}
@@ -180,22 +174,23 @@ function UserInfo({
           name="dob"
           children={(field) => (
             <div className="mb-2">
-              <FieldLabel htmlFor="email" className="mb-2">
+              <FieldLabel htmlFor="dob" className="mb-2">
                 Date of Birth
               </FieldLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
-                    disabled={disabled}
+                    id="dob"
+                    disabled={context?.loading}
                     variant="outline"
                     className={cn(
-                      "w-full justify-start text-left font-normal",
+                      "w-full justify-start text-left font-normal cursor-pointer",
                       !field.state.value && "text-muted-foreground",
                     )}
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {field.state.value
-                      ? field.state.value.toString()
+                      ? new Date(field.state.value).toDateString()
                       : "Pick a date"}
                   </Button>
                 </PopoverTrigger>
@@ -234,12 +229,13 @@ function UserInfo({
               name="currentpassword"
               children={(field) => (
                 <div className="mb-2">
-                  <FieldLabel htmlFor="email" className="mb-2">
+                  <FieldLabel htmlFor="curr-password" className="mb-2">
                     Current Password
                   </FieldLabel>
                   <div className="flex items-center gap-2">
                     <Input
-                      disabled={disabled}
+                      id="curr-password"
+                      disabled={context?.loading}
                       type={show.currentPassword ? "text" : "password"}
                       placeholder="Enter current password"
                       value={field.state.value}
@@ -264,9 +260,14 @@ function UserInfo({
                   </div>
 
                   {field.state.meta.errors.length > 0 && (
-                    <p className="text-red-500 text-sm">
-                      {field.state.meta.errors.join(",")}
-                    </p>
+                    <>
+                      
+                      <p className="text-red-500 text-sm">
+                        {field.state.meta.errors
+                          .map((err) => err?.message)
+                          .join(", ")}
+                      </p>
+                    </>
                   )}
                 </div>
               )}
@@ -275,15 +276,16 @@ function UserInfo({
               name="password"
               children={(field) => (
                 <div className="mb-2">
-                  <FieldLabel htmlFor="email" className="mb-2">
+                  <FieldLabel htmlFor="password" className="mb-2">
                     New Password
                   </FieldLabel>
                   <div className="flex items-center gap-2">
                     <Input
+                      id="password"
                       type={show.password ? "text" : "password"}
                       placeholder="Enter current password"
                       value={field.state.value}
-                      disabled={disabled}
+                      disabled={context?.loading}
                       onChange={(e) => field.handleChange(e.target.value)}
                     />
 
@@ -303,10 +305,15 @@ function UserInfo({
                       />
                     )}
                   </div>
-                  {!field.state.meta.isValid && (
-                    <p className="text-red-500 text-sm">
-                      {field.state.meta.errors.join(",")}
-                    </p>
+                  {field.state.meta.errors.length > 0 && (
+                    <>
+                      
+                      <p className="text-red-500 text-sm">
+                        {field.state.meta.errors
+                          .map((err) => err?.message)
+                          .join(", ")}
+                      </p>
+                    </>
                   )}
                 </div>
               )}
@@ -314,9 +321,28 @@ function UserInfo({
           </>
         )}
         <div className="flex justify-end mt-3">
-          <Button type="submit" className="w-28" disabled={disabled}>
-            {disabled ? <Loader className="animate-spin" /> : "Save changes"}
-          </Button>
+          <form.Subscribe
+            selector={(state) => [
+              state.canSubmit,
+              state.isSubmitting,
+              state.isDirty,
+            ]}
+            children={([canSubmit, isSubmitting, isDirty]) => (
+              <Button
+                type="submit"
+                className="w-28 cursor-pointer"
+                disabled={
+                  !isDirty || !canSubmit || context.loading || isSubmitting
+                }
+              >
+                {context.loading ? (
+                  <Loader className="animate-spin" />
+                ) : (
+                  "Save changes"
+                )}
+              </Button>
+            )}
+          />
         </div>
       </form>
     </div>

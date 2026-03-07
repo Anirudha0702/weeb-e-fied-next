@@ -1,15 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { PenLine } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ImageUploadDialog from "./ImageUploadDialog";
+import { ProfileContext } from "@/app/context/ProfileContext";
 
 interface CoverImageProps {
   src: string;
-  onEdit: (newSrc: string) => void;
 }
-function CoverImage({ src, onEdit }: CoverImageProps) {
+function CoverImage({ src}: CoverImageProps) {
   const [openImageChangeDialog, setOpenImageChangeDialog] = useState(false);
-  const handleEdit = (fileURL: string) => onEdit(fileURL);
+  const context = useContext(ProfileContext);
+  if (!context || !context?.profile) return null;
+  const handleEdit = async (file: File) => {
+    try {
+      await context.updateProfile({ coverPicture: file });
+      setOpenImageChangeDialog(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className="relative mb-4">
       <img
@@ -19,7 +28,7 @@ function CoverImage({ src, onEdit }: CoverImageProps) {
       />
       <Button
         className={`absolute top-2 right-2 cursor-pointer`}
-        data-editType="Cover"
+        data-edittype="Cover"
         onClick={() => setOpenImageChangeDialog(true)}
       >
         Edit <PenLine />
@@ -28,6 +37,7 @@ function CoverImage({ src, onEdit }: CoverImageProps) {
         open={openImageChangeDialog}
         type="Cover"
         onCancel={() => setOpenImageChangeDialog(false)}
+        loading={context.loading}
         onSuccess={handleEdit}
       />
     </div>

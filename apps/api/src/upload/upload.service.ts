@@ -6,7 +6,6 @@ import {
   v2 as cloudinary,
 } from 'cloudinary';
 import { Readable } from 'stream';
-import { Express } from 'express';
 
 @Injectable()
 export class UploadService {
