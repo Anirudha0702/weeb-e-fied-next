@@ -35,11 +35,15 @@ function Login() {
         setAuth({
           token: accessToken,
           user: {
-            name: user.name,
             id: user.id,
+            name: user.name,
+            username:user.username,
             email: user.email,
-            profilePicture: user.profilePicture ,
-            coverPicture: user.coverPicture ,
+            dob: user.dateOfBirth?.toISOString(),
+            bio: user.bio,
+            gender: user.gender,
+            profilePicture: user.profilePicture,
+            coverPicture: user.coverPicture,
           },
         });
         toast.success("Login successful!");

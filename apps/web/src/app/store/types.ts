@@ -2,9 +2,13 @@ import { z } from "zod";
 
 // Your existing Zod schemas
 export const authUser = z.object({
-  name: z.string(),
   id: z.string(),
+  name: z.string(),
+  username: z.string(),
   email: z.string(),
+  dob: z.string().or(z.undefined()),
+  gender: z.enum(["Male", "Female", "Others"]).nullable(),
+  bio: z.string().nullable(),
   profilePicture: z.string(),
   coverPicture: z.string(),
 });

@@ -13,7 +13,6 @@ import { EmailService } from './email/email.service';
 import { AuthService } from './auth/auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { GoogleStrategy } from './auth/stratagy/google.strategy';
-import { FacebookStrategy } from './auth/stratagy/facebook.strategy';
 import { UploadService } from './upload/upload.service';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './common/guards/auth/auth.guard';
@@ -55,7 +54,6 @@ import { AuthController } from './auth/auth.controller';
     EmailService,
     JwtService,
     GoogleStrategy,
-    FacebookStrategy,
     UploadService,
     AppLogger,
     {

@@ -27,6 +27,12 @@ export enum OAuthProvider {
   GITHUB = 'github',
   // add more as needed
 }
+export enum Role {
+  USER = 'user',
+  MODERATOR = 'moderator',
+  ADMIN = 'adimn',
+  // add more as needed
+}
 
 @Entity()
 export class User {
@@ -46,7 +52,7 @@ export class User {
   @Column({
     nullable: true,
     default:
-      'https://res.cloudinary.com/dnmshy1ag/image/upload/v1763277858/flat-design-male-female-symbols_23-2149288474_yhj2i1.webp',
+      'https://res.cloudinary.com/dmz0cwtzd/image/upload/v1772130018/cloud_share/user-avatar_f9dzet.png',
   })
   profilePicture: string;
 
@@ -56,7 +62,12 @@ export class User {
       'https://res.cloudinary.com/dnmshy1ag/image/upload/v1763277703/360_F_1058923741_Ug7YblqBl7rRxNeJ5iOxvONEZys87NqC_ebaw9d.webp',
   })
   coverPicture: string;
-
+  @Column({
+    type: 'enum',
+    default: 'user',
+    enum: Role,
+  })
+  role: Role;
   @Column({ nullable: true, length: 160 })
   bio: string;
 

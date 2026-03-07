@@ -24,7 +24,7 @@ export const streamSchema = z.object({
   publishedEpisodes: z.int32(),
 });
 export type TStream = z.infer<typeof streamSchema>;
-const AuthserResponse = z.object({
+const userSchema = z.object({
   id: z.string(),
   email: z.string(),
   name: z.string(),
@@ -32,6 +32,8 @@ const AuthserResponse = z.object({
   coverPicture: z.string(),
   bio: z.string().nullable(),
   dateOfBirth: z.coerce.date().nullable(),
+  gender: z.literal(["Male", "Female", "Others"]).nullable(),
+  username:z.string(),
   isVerified: z.boolean(),
   isBlocked: z.boolean(),
   createdAt: z.coerce.date(),
@@ -40,16 +42,17 @@ const AuthserResponse = z.object({
 });
 // Register Endpoint API Type
 export const registerDataSchema = z.object({
-  user: AuthserResponse,
+  user: userSchema,
 });
 
 // Composed Endpoint Schemas
-export const registerResponseSchema = AuthserResponse;
+export const registerResponseSchema = userSchema;
 
 //Inferred Types
 export type RegisterResponse = z.infer<typeof registerResponseSchema>;
+export type UserInfoResposne = z.infer<typeof registerDataSchema>;
 export const loginDataSchema = z.object({
-  user: AuthserResponse,
+  user: userSchema,
   accessToken: z.string(),
   refreshToken: z.string(),
 });
@@ -63,7 +66,13 @@ export const logoutDataSchema = z.object({
 export const logoutResponseSchema = logoutDataSchema;
 
 export type LogoutResponse = z.infer<typeof logoutResponseSchema>;
+export const updateUserDataSchema = z.object({
+  user: userSchema,
+});
 
+export const updateResponseSchema = updateUserDataSchema;
+
+export type UpdateUserResponse = z.infer<typeof updateResponseSchema>;
 export const OTPSchema = z.object({
   id: z.uuid(),
   email: z.email(),
@@ -89,7 +98,6 @@ export const verifyUserSchema = z.object({
 
 export const VerifyUserResponseSchema = verifyUserSchema;
 export type VerifyUserResponse = z.infer<typeof VerifyUserResponseSchema>;
-
 
 export const commentWithUserLike = comment.extend({
   user: z.object({
