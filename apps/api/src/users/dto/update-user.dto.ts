@@ -1,13 +1,10 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString, ValidateIf } from 'class-validator';
 import { Gender } from '../entities/user.entity';
 
 export class UpdateUserDto {
   @IsString()
   @IsOptional()
   name?: string;
-  @IsString()
-  @IsOptional()
-  password?: string;
   @IsString()
   @IsOptional()
   gender?: Gender;
@@ -17,10 +14,11 @@ export class UpdateUserDto {
   @IsString()
   @IsOptional()
   bio?: string;
+  @ValidateIf((o) => o.newPassword !== undefined)
   @IsString()
-  @IsOptional()
   currentPassword?: string;
+
+  @ValidateIf((o) => o.currentPassword !== undefined)
   @IsString()
-  @IsOptional()
   newPassword?: string;
 }

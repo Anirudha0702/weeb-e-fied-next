@@ -1,5 +1,5 @@
 import { ProfileContext } from "@/app/context/ProfileContext";
-import { updateUserInfoSchema, type UpdateUserForm } from "@/app/types/types";
+import { UpdateUserFormSchema, type UpdateUserForm } from "@/app/types/types";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { FieldLabel } from "@/components/ui/field";
@@ -35,11 +35,11 @@ function UserInfo({ email, username }: UserInfoProps) {
       dob: context?.profile?.dob ?? undefined,
       gender: context?.profile?.gender,
       bio: context?.profile?.bio,
-      password: undefined,
-      currentpassword: undefined,
+      newPassword: undefined,
+      currentPassword: undefined,
     } as UpdateUserForm & { email: string; userName: string },
     validators: {
-      onChange: updateUserInfoSchema,
+      onChange: UpdateUserFormSchema,
     },
     onSubmit: ({ value }) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -134,7 +134,6 @@ function UserInfo({ email, username }: UserInfoProps) {
 
               {field.state.meta.errors.length > 0 && (
                 <>
-                  
                   <p className="text-red-500 text-sm">
                     {field.state.meta.errors
                       .map((err) => err?.message)
@@ -226,7 +225,7 @@ function UserInfo({ email, username }: UserInfoProps) {
         {wannaChangePassword && (
           <>
             <form.Field
-              name="currentpassword"
+              name="currentPassword"
               children={(field) => (
                 <div className="mb-2">
                   <FieldLabel htmlFor="curr-password" className="mb-2">
@@ -261,7 +260,6 @@ function UserInfo({ email, username }: UserInfoProps) {
 
                   {field.state.meta.errors.length > 0 && (
                     <>
-                      
                       <p className="text-red-500 text-sm">
                         {field.state.meta.errors
                           .map((err) => err?.message)
@@ -273,7 +271,7 @@ function UserInfo({ email, username }: UserInfoProps) {
               )}
             />
             <form.Field
-              name="password"
+              name="newPassword"
               children={(field) => (
                 <div className="mb-2">
                   <FieldLabel htmlFor="password" className="mb-2">
@@ -307,7 +305,6 @@ function UserInfo({ email, username }: UserInfoProps) {
                   </div>
                   {field.state.meta.errors.length > 0 && (
                     <>
-                      
                       <p className="text-red-500 text-sm">
                         {field.state.meta.errors
                           .map((err) => err?.message)

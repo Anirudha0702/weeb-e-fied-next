@@ -33,6 +33,7 @@ function ProfileImage({ src }: ProfileImageProps) {
           className="h-7 flex items-center gap-2 cursor-pointer"
           data-edittype="Profile"
           onClick={() => setOpenImageChangeDialog(true)}
+          disabled={context.loading}
         >
           Edit <PenLine />
         </Button>

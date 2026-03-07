@@ -30,6 +30,7 @@ function CoverImage({ src}: CoverImageProps) {
         className={`absolute top-2 right-2 cursor-pointer`}
         data-edittype="Cover"
         onClick={() => setOpenImageChangeDialog(true)}
+        disabled={context.loading}
       >
         Edit <PenLine />
       </Button>
