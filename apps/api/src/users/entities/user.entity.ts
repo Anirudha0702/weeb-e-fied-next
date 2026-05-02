@@ -9,6 +9,7 @@ import {
 import { Post } from '../../posts/entities/post.entity';
 import { Like } from '../../like/entities/like.entity';
 import { Comment } from '../../comment/entities/comment.entity';
+import { Watchlist } from '@/watchlist/entities/watchlist.entity';
 
 export enum Gender {
   MALE = 'Male',
@@ -37,69 +38,71 @@ export enum Role {
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column({ unique: true })
-  email: string;
+  email!: string;
 
   @Column()
-  password: string;
+  password!: string;
   @Column({ unique: true })
-  username: string;
+  username!: string;
   @Column()
-  name: string;
+  name!: string;
 
   @Column({
     nullable: true,
     default:
       'https://res.cloudinary.com/dmz0cwtzd/image/upload/v1772130018/cloud_share/user-avatar_f9dzet.png',
   })
-  profilePicture: string;
+  profilePicture!: string;
 
   @Column({
     nullable: true,
     default:
       'https://res.cloudinary.com/dnmshy1ag/image/upload/v1763277703/360_F_1058923741_Ug7YblqBl7rRxNeJ5iOxvONEZys87NqC_ebaw9d.webp',
   })
-  coverPicture: string;
+  coverPicture!: string;
   @Column({
     type: 'enum',
     default: 'user',
     enum: Role,
   })
-  role: Role;
+  role!: Role;
   @Column({ nullable: true, length: 160 })
-  bio: string;
+  bio!: string;
 
   @Column({ type: 'date', nullable: true })
-  dateOfBirth: Date;
+  dateOfBirth!: Date;
 
   @Column({ type: 'enum', enum: Gender, nullable: true })
-  gender: Gender;
+  gender!: Gender;
 
   @Column({ default: false })
-  createdByOauth: boolean;
+  createdByOauth!: boolean;
 
   @OneToMany(() => Post, (post) => post.user)
-  posts: Post[];
+  posts!: Post[];
   @OneToMany(() => Like, (like) => like.user)
-  likes: Like[];
+  likes!: Like[];
   @OneToMany(() => Comment, (comment) => comment.user)
-  comments: Comment[];
+  comments!: Comment[];
+  @OneToMany(() => Watchlist, (watchlist) => watchlist.user)
+  watchlist!: Watchlist[];
   @Column({ default: false })
-  isVerified: boolean;
+  isVerified!: boolean;
 
   @Column({ default: true })
-  isBlocked: boolean;
+  isBlocked!: boolean;
   @Column({ default: false })
-  isAdmin: boolean;
+  isAdmin!: boolean;
 
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ type: 'timestamptz' })
-  updatedAt: Date;
+  updatedAt!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  lastLogin: Date;
+  lastLogin!: Date;
 }

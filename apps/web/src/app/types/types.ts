@@ -120,3 +120,18 @@ export const updateUserInfoSchema = z
     },
   );
 export type UpdateUserForm = z.infer<typeof UpdateUserFormSchema>;
+
+export const watchlistUpdateSchema = z.object({
+  mediaId: z.number(),
+  status: z.enum([
+    "watching",
+    "completed",
+    "on-hold",
+    "dropped",
+    "planned",
+  ]),
+  progress: z.number().optional(),
+  remove: z.boolean().optional(),
+});
+
+export type TWatchlistUpdatePayload = z.infer<typeof watchlistUpdateSchema>;
