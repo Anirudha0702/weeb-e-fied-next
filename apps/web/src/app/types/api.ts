@@ -33,7 +33,7 @@ const userSchema = z.object({
   bio: z.string().nullable(),
   dateOfBirth: z.coerce.date().nullable(),
   gender: z.literal(["Male", "Female", "Others"]).nullable(),
-  username:z.string(),
+  username: z.string(),
   isVerified: z.boolean(),
   isBlocked: z.boolean(),
   createdAt: z.coerce.date(),
@@ -116,3 +116,10 @@ export const allCommentsResponseSchema = z.object({
   hasNextPage: z.boolean(),
 });
 export type TAllCommentsResponse = z.infer<typeof allCommentsResponseSchema>;
+
+export const watchlistSchema = z.object({
+  mediaId: z.number(),
+  status: z.enum(["watching", "completed", "on-hold", "planned", "dropped"]),
+  remove: z.boolean().optional(),
+});
+export type TWatchlist = z.infer<typeof watchlistSchema>;

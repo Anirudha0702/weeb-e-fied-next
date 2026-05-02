@@ -23,6 +23,7 @@ import { LoggerModule } from './common/logger/logger.module';
 import { CommentModule } from './comment/comment.module';
 import { LikeModule } from './like/like.module';
 import { AuthController } from './auth/auth.controller';
+import { WatchlistModule } from './watchlist/watchlist.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { AuthController } from './auth/auth.controller';
     MediaModule,
     CommentModule,
     LikeModule,
+    WatchlistModule,
   ],
   controllers: [AppController, AuthController],
   providers: [

@@ -1,6 +1,7 @@
 import Footer from "@/app/components/common/Footer";
 import Navbar from "@/app/components/common/Navbar";
 import Sidebar from "@/app/components/common/Sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { Outlet, createFileRoute } from "@tanstack/react-router";
 
 // export const Route = createFileRoute("/_layout")({
@@ -33,28 +34,29 @@ export const Route = createFileRoute("/_layout")({
   component: () => (
     <div className="min-h-dvh">
       <Navbar />
-
-      <div
-        className="
+      <TooltipProvider>
+        <div
+          className="
           grid
           lg:grid-cols-[20rem_1fr]
           xl:grid-cols-[20rem_1fr_20rem]
         "
-      >
-        {/* LEFT SIDEBAR */}
-        <Sidebar className="hidden lg:block bg-muted/20 sticky top-0 h-dvh  pt-16" />
+        >
+          {/* LEFT SIDEBAR */}
+          <Sidebar className="hidden lg:block bg-muted/20 sticky top-0 h-dvh  pt-16" />
 
-        {/* MIDDLE CONTENT (WINDOW SCROLLS THIS) */}
-        <div className="min-w-0 max-w-7xl ">
-          <main className="p-2">
-            <Outlet />
-          </main>
-          <Footer />
+          {/* MIDDLE CONTENT (WINDOW SCROLLS THIS) */}
+          <div className="min-w-0 max-w-7xl ">
+            <main className="p-2">
+              <Outlet />
+            </main>
+            <Footer />
+          </div>
+
+          {/* RIGHT SIDEBAR */}
+          <div className="hidden xl:block bg-muted/20 sticky top-0 h-dvh" />
         </div>
-
-        {/* RIGHT SIDEBAR */}
-        <div className="hidden xl:block bg-muted/20 sticky top-0 h-dvh" />
-      </div>
+      </TooltipProvider>
     </div>
   ),
 });
